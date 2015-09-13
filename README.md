@@ -1,5 +1,7 @@
 # woot
 
+### Unstable - do not use yet
+
 Core library for creating real time collaborative documents without Operational
 transformation (WOOT). This package provides the core logic and data types for building a server capable and handling real time editing with WOOT.
 
