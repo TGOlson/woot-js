@@ -18,9 +18,10 @@ import WString from './wstring';
 
 // matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
 const matchOperationType = (dict) => {
-  return ({type}) => {
+  return (...args) => {
+    const type = R.path(['0', 'type'], args);
     if (R.has(type, dict)) {
-      return R.prop(type, dict).apply(null, arguments);
+      return R.prop(type, dict).apply(null, args);
     }
 
     throw new Error('Invalid operation type: ' + type);
@@ -29,7 +30,7 @@ const matchOperationType = (dict) => {
 
 // canIntegrate :: Operation -> WString -> Bool
 const canIntegrate = matchOperationType({
-  insert: ({wChar}, wString) => {
+  insert: (wChar, wString) => {
     const containsPrev = WString.contains(wChar.prevId, wString);
     const containsNext = WString.contains(wChar.nextId, wString);
     return containsPrev && containsNext;
@@ -66,10 +67,15 @@ const integrate = (operation, wString) => {
 //     integrate' (ops', s) op = maybe (ops' ++ [op], s) (ops',) (integrate op s)
 
 // integrateAll :: [Operation] -> WString -> ([Operation], WString)
-const integrateAll = function(operation, wString) {
-  const integrate_ = ()
+const integrateAll = function(operations, wString) {
+  const integrate_ = ([ops, s], op) => {
+    const res = integrate(op, s);
+    return res ? [ops, res] : [R.append(op, ops), s];
+  };
 
-  const result = R.reduce(integrate_)
+  const [newOps, s] = R.reduce(integrate_, [[], wString], operations);
+
+  return R.length(operations) === R.length(newOps) ? [newOps, s] : integrateAll(newOps, s);
 };
 
 

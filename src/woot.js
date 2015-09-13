@@ -77,7 +77,8 @@ const updateWString = R.assoc('wString');
 //     where
 //       (ops', ws') = integrateAll (op:ops) ws
 const sendOperation = (client, operation) => {
-  const operations = R.append(operation, client.operations);
+  console.log(client, operation);
+  const operations = R.append(operation, client.operationQueue);
   const result = Core.integrateAll(operations, client.wString);
 
   return updateWString(result.wString,

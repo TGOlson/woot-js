@@ -93,7 +93,8 @@ var updateWString = _ramda2['default'].assoc('wString');
 //     where
 //       (ops', ws') = integrateAll (op:ops) ws
 var sendOperation = function sendOperation(client, operation) {
-  var operations = _ramda2['default'].append(operation, client.operations);
+  console.log(client, operation);
+  var operations = _ramda2['default'].append(operation, client.operationQueue);
   var result = _wootCore2['default'].integrateAll(operations, client.wString);
 
   return updateWString(result.wString, updateOperations(result.operations, client));

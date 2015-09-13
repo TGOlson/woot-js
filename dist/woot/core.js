@@ -17,7 +17,8 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-var _arguments = arguments;
+
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i['return']) _i['return'](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError('Invalid attempt to destructure non-iterable instance'); } }; })();
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -29,47 +30,55 @@ var _wstring = require('./wstring');
 
 var _wstring2 = _interopRequireDefault(_wstring);
 
+// matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
 var matchOperationType = function matchOperationType(dict) {
-  return function (operation) {
-    if (_ramda2['default'].has(operation.type, dict)) {
-      return _ramda2['default'].prop(operation.type, dict).apply(null, _arguments);
+  return function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
     }
 
-    throw new Error('Invalid operation type: ' + operation.type);
+    var type = _ramda2['default'].path(['0', 'type'], args);
+    if (_ramda2['default'].has(type, dict)) {
+      return _ramda2['default'].prop(type, dict).apply(null, args);
+    }
+
+    throw new Error('Invalid operation type: ' + type);
   };
 };
 
 // canIntegrate :: Operation -> WString -> Bool
-// canIntegrate (Operation Insert _ wc) ws = all (`contains` ws) [wCharPrevId wc, wCharNextId wc]
-// canIntegrate (Operation Delete _ wc) ws = contains (wCharId wc) ws
 var canIntegrate = matchOperationType({
-  insert: function insert(operation, wString) {
-    var containsPrev = _wstring2['default'].contains(operation.wChar.prevId, wString);
-    var containsNext = _wstring2['default'].contains(operation.wChar.nextId, wString);
+  insert: function insert(wChar, wString) {
+    var containsPrev = _wstring2['default'].contains(wChar.prevId, wString);
+    var containsNext = _wstring2['default'].contains(wChar.nextId, wString);
     return containsPrev && containsNext;
   },
-  'delete': function _delete(operation, wString) {
-    return _wstring2['default'].contains(operation.wChar.id, wString);
+  'delete': function _delete(_ref, wString) {
+    var wChar = _ref.wChar;
+
+    return _wstring2['default'].contains(wChar.id, wString);
   }
 });
 
 // integrateOp :: Operation -> WString -> WString
-// integrateOp (Operation Insert _ wc) ws = integrateInsert (wCharPrevId wc) (wCharNextId wc) wc ws
-// integrateOp (Operation Delete _ wc) ws = integrateDelete wc ws
 var integrateOp = matchOperationType({
-  insert: function insert(operation, wString) {
-    return integrateInsert(operation.wChar.prevId, operation.wChar.nextId, wString);
+  insert: function insert(_ref2, wString) {
+    var wChar = _ref2.wChar;
+
+    return integrateInsert(wChar.prevId, wChar.nextId, wString);
   },
-  'delete': function _delete(operation, wString) {
-    return integrateDelete(operation.wChar, wString);
+  'delete': function _delete(_ref3, wString) {
+    var wChar = _ref3.wChar;
+
+    return integrateDelete(wChar, wString);
   }
 });
 
-// integrate :: Operation -> WString -> Maybe WString
-// integrate op ws = if canIntegrate op ws then Just $ integrateOp op ws else Nothing
+// integrate :: Operation -> WString -> WString | null
 var integrate = function integrate(operation, wString) {
   return canIntegrate(operation, wString) ? integrateOp(operation, wString) : null;
 };
+
 //
 // -- iterate through operation list until stable
 // -- return any remaining operations, along with new string
@@ -81,7 +90,41 @@ var integrate = function integrate(operation, wString) {
 //     integrate' (ops', s) op = maybe (ops' ++ [op], s) (ops',) (integrate op s)
 
 // integrateAll :: [Operation] -> WString -> ([Operation], WString)
-var integrateAll = function integrateAll(operation, wString) {};
+var integrateAll = function integrateAll(_x, _x2) {
+  var _again = true;
+
+  _function: while (_again) {
+    var operations = _x,
+        wString = _x2;
+    integrate_ = _R$reduce = _R$reduce2 = newOps = s = undefined;
+    _again = false;
+
+    var integrate_ = function integrate_(_ref4, op) {
+      var _ref42 = _slicedToArray(_ref4, 2);
+
+      var ops = _ref42[0];
+      var s = _ref42[1];
+
+      var res = integrate(op, s);
+      return res ? [ops, res] : [_ramda2['default'].append(op, ops), s];
+    };
+
+    var _R$reduce = _ramda2['default'].reduce(integrate_, [[], wString], operations);
+
+    var _R$reduce2 = _slicedToArray(_R$reduce, 2);
+
+    var newOps = _R$reduce2[0];
+    var s = _R$reduce2[1];
+    if (_ramda2['default'].length(operations) === _ramda2['default'].length(newOps)) {
+      return [newOps, s];
+    } else {
+      _x = newOps;
+      _x2 = s;
+      _again = true;
+      continue _function;
+    }
+  }
+};
 
 //
 // integrateInsert :: WCharId -> WCharId -> WChar -> WString -> WString

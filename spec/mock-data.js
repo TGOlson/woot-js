@@ -5,6 +5,8 @@
 // import Data.Woot.WChar
 // import Data.Woot.WString
 //
+import Operation from '../dist/woot/operation';
+import WChar from '../dist/woot/wchar';
 //
 // mockWString :: WString
 // mockWString = fromList [
@@ -15,11 +17,21 @@
 //     , WChar (WCharId 0 3) True  'r' (WCharId 0 2)    (WCharId (-1) 1)
 //     , wCharEnding
 //     ]
+const mockWString = [
+
+];
 //
 //
 // validInsertOp :: Operation
 // validInsertOp = Operation Insert 0
-//     (WChar (WCharId 0 10) True 'q' (WCharId 0 2) (WCharId 0 3))
+    // (WChar (WCharId 0 10) True 'q' (WCharId 0 2) (WCharId 0 3))
+const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
+  id: {},
+  visible: true,
+  alpha: 'a',
+  prevId: {},
+  nextId: {}
+}));
 //
 //
 // validInsertOpAmbiguous :: Operation
@@ -54,3 +66,8 @@
 // validInsertAfterQueuedInsert :: Operation
 // validInsertAfterQueuedInsert = Operation Insert 0
 //     (WChar (WCharId 0 100) True '#' (WCharId 0 50) (WCharId 0 3))
+
+export default {
+  mockWString,
+  validInsertOp
+};
