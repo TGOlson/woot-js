@@ -16,49 +16,45 @@ import R from 'ramda';
 
 import WString from './wstring';
 
-
+// matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
 const matchOperationType = (dict) => {
-  return (operation) => {
-    if (R.has(operation.type, dict)) {
-      return R.prop(operation.type, dict).apply(null, arguments);
+  return ({type}) => {
+    if (R.has(type, dict)) {
+      return R.prop(type, dict).apply(null, arguments);
     }
 
-    throw new Error('Invalid operation type: ' + operation.type);
+    throw new Error('Invalid operation type: ' + type);
   };
 };
 
 // canIntegrate :: Operation -> WString -> Bool
-// canIntegrate (Operation Insert _ wc) ws = all (`contains` ws) [wCharPrevId wc, wCharNextId wc]
-// canIntegrate (Operation Delete _ wc) ws = contains (wCharId wc) ws
 const canIntegrate = matchOperationType({
-  insert: (operation, wString) => {
-    const containsPrev = WString.contains(operation.wChar.prevId, wString);
-    const containsNext = WString.contains(operation.wChar.nextId, wString);
+  insert: ({wChar}, wString) => {
+    const containsPrev = WString.contains(wChar.prevId, wString);
+    const containsNext = WString.contains(wChar.nextId, wString);
     return containsPrev && containsNext;
   },
-  'delete': (operation, wString) => {
-    return WString.contains(operation.wChar.id, wString);
+  'delete': ({wChar}, wString) => {
+    return WString.contains(wChar.id, wString);
   }
 });
 
 
 // integrateOp :: Operation -> WString -> WString
-// integrateOp (Operation Insert _ wc) ws = integrateInsert (wCharPrevId wc) (wCharNextId wc) wc ws
-// integrateOp (Operation Delete _ wc) ws = integrateDelete wc ws
 const integrateOp = matchOperationType({
-  insert: (operation, wString) => {
-    return integrateInsert(operation.wChar.prevId, operation.wChar.nextId, wString);
+  insert: ({wChar}, wString) => {
+    return integrateInsert(wChar.prevId, wChar.nextId, wString);
   },
-  'delete': (operation, wString) => {
-    return integrateDelete(operation.wChar, wString);
+  'delete': ({wChar}, wString) => {
+    return integrateDelete(wChar, wString);
   }
 });
 
-// integrate :: Operation -> WString -> Maybe WString
-// integrate op ws = if canIntegrate op ws then Just $ integrateOp op ws else Nothing
+// integrate :: Operation -> WString -> WString | null
 const integrate = (operation, wString) => {
   return canIntegrate(operation, wString) ? integrateOp(operation, wString) : null;
 };
+
 //
 // -- iterate through operation list until stable
 // -- return any remaining operations, along with new string
@@ -71,7 +67,9 @@ const integrate = (operation, wString) => {
 
 // integrateAll :: [Operation] -> WString -> ([Operation], WString)
 const integrateAll = function(operation, wString) {
+  const integrate_ = ()
 
+  const result = R.reduce(integrate_)
 };
 
 
