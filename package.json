@@ -4,7 +4,7 @@
   "description": "Core library for creating real time collaborative documents without Operational transformation (WOOT). This package provides the core logic and data types for building a server capable and handling real time editing with WOOT.",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/jasmine"
+    "test": "./node_modules/.bin/gulp test"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "eslint-config-airbnb": "0.0.6",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
-    "gulp-concat": "^2.6.0",
+    "gulp-shell": "^0.4.3",
     "gulp-sourcemaps": "^1.5.2",
     "jasmine": "^2.3.2"
   },

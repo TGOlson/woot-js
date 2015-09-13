@@ -106,13 +106,24 @@
 
 'use strict';
 
-var R = require('ramda');
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-var WChar = require('./wchar');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var makeEmptyWString = R.always([WChar.beginningChar, WChar.endingChar]);
+var _ramda = require('ramda');
 
-module.exports = {
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _wchar = require('./wchar');
+
+var _wchar2 = _interopRequireDefault(_wchar);
+
+var makeEmptyWString = _ramda2['default'].always([_wchar2['default'].beginningChar, _wchar2['default'].endingChar]);
+
+exports['default'] = {
   makeEmptyWString: makeEmptyWString
 };
+module.exports = exports['default'];
 //# sourceMappingURL=../woot/wstring.js.map

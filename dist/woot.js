@@ -25,10 +25,24 @@
 
 'use strict';
 
-var R = require('ramda');
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
 
-var Core = require('./woot/core');
-var WString = require('./woot/wstring');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _wootCore = require('./woot/core');
+
+var _wootCore2 = _interopRequireDefault(_wootCore);
+
+var _wootWstring = require('./woot/wstring');
+
+var _wootWstring2 = _interopRequireDefault(_wootWstring);
+
 //
 // import Data.Woot.Core
 // import Data.Woot.Operation
@@ -52,7 +66,7 @@ var WString = require('./woot/wstring');
 // -- and then start the client clock at the correct value?
 // makeWootClient :: WString -> ClientId -> WootClient
 // makeWootClient ws cid = WootClient cid 0 ws []
-var makeWootClient = R.curry(function (wString, clientId) {
+var makeWootClient = _ramda2['default'].curry(function (wString, clientId) {
   return {
     clientId: clientId,
     clock: 0,
@@ -61,12 +75,15 @@ var makeWootClient = R.curry(function (wString, clientId) {
   };
 });
 
-var makeWootClientEmpty = makeWootClient(WString.makeEmptyWString());
+var makeWootClientEmpty = makeWootClient(_wootWstring2['default'].makeEmptyWString());
 
 //
 // makeWootClientEmpty :: ClientId -> WootClient
 // makeWootClientEmpty = makeWootClient emptyWString
 //
+
+var updateOperations = _ramda2['default'].assoc('operations');
+var updateWString = _ramda2['default'].assoc('wString');
 //
 // -- sends an operation to a woot client, returning a new woot client
 // -- the operation will either be integrated into the woot client's string
@@ -76,14 +93,11 @@ var makeWootClientEmpty = makeWootClient(WString.makeEmptyWString());
 //     where
 //       (ops', ws') = integrateAll (op:ops) ws
 var sendOperation = function sendOperation(client, operation) {
-  var operations = R.append(operation, client.operations);
-  var result = Core.integrateAll(operations, client.wString);
+  var operations = _ramda2['default'].append(operation, client.operations);
+  var result = _wootCore2['default'].integrateAll(operations, client.wString);
 
   return updateWString(result.wString, updateOperations(result.operations, client));
 };
-
-var updateOperations = R.assoc('operations');
-var updateWString = R.assoc('wString');
 //
 // sendOperations :: WootClient -> [Operation] -> WootClient
 // sendOperations = foldl sendOperation
@@ -111,9 +125,10 @@ var updateWString = R.assoc('wString');
 //   where
 //     op = makeInsertOperation (WCharId cid clock) pos a ws
 
-module.exports = {
+exports['default'] = {
   makeWootClient: makeWootClient,
   makeWootClientEmpty: makeWootClientEmpty,
   sendOperation: sendOperation
 };
+module.exports = exports['default'];
 //# sourceMappingURL=woot.js.map

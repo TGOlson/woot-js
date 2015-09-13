@@ -1,8 +1,12 @@
 'use strict';
 
-var R = require('ramda');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var makeOperation = R.curry(function (type, clientId, wChar) {
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var makeOperation = _ramda2['default'].curry(function (type, clientId, wChar) {
   return {
     type: type,
     clientId: clientId,

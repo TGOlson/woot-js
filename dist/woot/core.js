@@ -14,38 +14,42 @@
 // import Data.Woot.WString
 'use strict';
 
-var R = require('ramda');
-//
-// integrate :: Operation -> WString -> Maybe WString
-// integrate op ws = if canIntegrate op ws then Just $ integrateOp op ws else Nothing
-var integrate = function integrate(operation, wString) {
-  return canIntegrate(operation, wString) ? integrateOp(operation, ws) : null;
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+var _arguments = arguments;
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var _ramda = require('ramda');
+
+var _ramda2 = _interopRequireDefault(_ramda);
+
+var _wstring = require('./wstring');
+
+var _wstring2 = _interopRequireDefault(_wstring);
+
+var matchOperationType = function matchOperationType(dict) {
+  return function (operation) {
+    if (_ramda2['default'].has(operation.type, dict)) {
+      return _ramda2['default'].prop(operation.type, dict).apply(null, _arguments);
+    }
+
+    throw new Error('Invalid operation type: ' + operation.type);
+  };
 };
-//
-// -- iterate through operation list until stable
-// -- return any remaining operations, along with new string
-// integrateAll :: [Operation] -> WString -> ([Operation], WString)
-// integrateAll ops ws = if length ops == length newOps then result
-//     else integrateAll newOps newString
-//   where
-//     result@(newOps, newString)  = foldl integrate' ([], ws) ops
-//     integrate' (ops', s) op = maybe (ops' ++ [op], s) (ops',) (integrate op s)
 
-// integrateAll :: [Operation] -> WString -> ([Operation], WString)
-var integrateAll = function integrateAll(operation, wString) {};
-
-//
 // canIntegrate :: Operation -> WString -> Bool
 // canIntegrate (Operation Insert _ wc) ws = all (`contains` ws) [wCharPrevId wc, wCharNextId wc]
 // canIntegrate (Operation Delete _ wc) ws = contains (wCharId wc) ws
 var canIntegrate = matchOperationType({
   insert: function insert(operation, wString) {
-    var containsPrev = WString.contains(operation.wChar.prevId, wString);
-    var containsNext = WString.contains(operation.wChar.nextId, wString);
+    var containsPrev = _wstring2['default'].contains(operation.wChar.prevId, wString);
+    var containsNext = _wstring2['default'].contains(operation.wChar.nextId, wString);
     return containsPrev && containsNext;
   },
   'delete': function _delete(operation, wString) {
-    return WString.contains(operation.wChar.id, wString);
+    return _wstring2['default'].contains(operation.wChar.id, wString);
   }
 });
 
@@ -61,15 +65,24 @@ var integrateOp = matchOperationType({
   }
 });
 
-var matchOperationType = function matchOperationType(dict) {
-  return function (operation) {
-    if (R.has(operation.type, dict)) {
-      return R.prop(operation.type, dict).apply(null, arguments);
-    } else {
-      throw new Error('Invalid operation type: ' + operation.type);
-    }
-  };
+// integrate :: Operation -> WString -> Maybe WString
+// integrate op ws = if canIntegrate op ws then Just $ integrateOp op ws else Nothing
+var integrate = function integrate(operation, wString) {
+  return canIntegrate(operation, wString) ? integrateOp(operation, wString) : null;
 };
+//
+// -- iterate through operation list until stable
+// -- return any remaining operations, along with new string
+// integrateAll :: [Operation] -> WString -> ([Operation], WString)
+// integrateAll ops ws = if length ops == length newOps then result
+//     else integrateAll newOps newString
+//   where
+//     result@(newOps, newString)  = foldl integrate' ([], ws) ops
+//     integrate' (ops', s) op = maybe (ops' ++ [op], s) (ops',) (integrate op s)
+
+// integrateAll :: [Operation] -> WString -> ([Operation], WString)
+var integrateAll = function integrateAll(operation, wString) {};
+
 //
 // integrateInsert :: WCharId -> WCharId -> WChar -> WString -> WString
 // -- if char already exists
@@ -112,4 +125,10 @@ var matchOperationType = function matchOperationType(dict) {
 //   where
 //     beginningChar = ws !? 0
 //     endingChar = ws !? (lengthWS ws - 1)
+
+exports['default'] = {
+  integrate: integrate,
+  integrateAll: integrateAll
+};
+module.exports = exports['default'];
 //# sourceMappingURL=../woot/core.js.map
