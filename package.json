@@ -1,0 +1,33 @@
+{
+  "name": "woot-js",
+  "version": "0.0.0",
+  "description": "Core library for creating real time collaborative documents without Operational transformation (WOOT). This package provides the core logic and data types for building a server capable and handling real time editing with WOOT.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TGOlson/woot-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TGOlson/woot-js/issues"
+  },
+  "homepage": "https://github.com/TGOlson/woot-js#readme",
+  "devDependencies": {
+    "babel-core": "^5.8.24",
+    "babel-eslint": "^4.1.1",
+    "eslint": "0.24.1",
+    "eslint-config-airbnb": "0.0.6",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.2.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-sourcemaps": "^1.5.2",
+    "jasmine": "^2.3.2"
+  },
+  "dependencies": {
+    "ramda": "^0.17.1"
+  }
+}
