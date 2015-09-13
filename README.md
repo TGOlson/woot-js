@@ -1,4 +1,4 @@
-# woot
+# woot-js
 
 ### Unstable - do not use yet
 
@@ -10,22 +10,14 @@ transformation (WOOT). This package provides the core logic and data types for b
 Install
 
 ```
-$ stack install woot
+$ npm install --save woot
 ```
 
 Test
 
 ```
-stack test
+npm test
 ```
-
-Notes:
-
-* Haskell server is a passive peer in the process
-* only needs a remote integration function
-
-* https://github.com/kroky/woot/blob/master/src/woot.coffee
-* https://bitbucket.org/d6y/woot
 
 Example:
 

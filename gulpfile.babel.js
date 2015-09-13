@@ -13,18 +13,16 @@ gulp.task('build', () => {
 
 gulp.task('test', (cb) => {
   gulp.src('')
-    .pipe(shell('./node_modules/.bin/jasmine'));
-    // TODO: how do we gracefully exit after failures?
-    // .pipe(cb);
+    .pipe(shell('./node_modules/.bin/jasmine'))
+    .on('error', () => cb());
 });
-// shell.task('./node_modules/.bin/jasmine'));
 
 gulp.task('tdd', ['test'], () => {
   gulp.watch(['spec/**/*.js', 'dist/**/*.js'], ['test']);
 });
 
-gulp.task('watchSrc', () => {
-  gulp.watch(['src/**/*.js', 'dist/**/*.js'], ['build']);
+gulp.task('watch', () => {
+  gulp.watch(['src/**/*.js'], ['build']);
 });
 
-gulp.task('default', ['watchSrc', 'tdd'])
+gulp.task('default', ['watch', 'tdd'])
