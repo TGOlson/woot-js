@@ -14,7 +14,8 @@ gulp.task('build', () => {
 gulp.task('test', (cb) => {
   gulp.src('')
     .pipe(shell('./node_modules/.bin/jasmine'))
-    .on('error', () => cb());
+    .on('error', () => cb())
+    .on('end', () => cb());
 });
 
 gulp.task('tdd', ['test'], () => {
@@ -25,4 +26,4 @@ gulp.task('watch', () => {
   gulp.watch(['src/**/*.js'], ['build']);
 });
 
-gulp.task('default', ['watch', 'tdd'])
+gulp.task('default', ['watch', 'tdd']);

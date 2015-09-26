@@ -122,8 +122,28 @@ var _wchar2 = _interopRequireDefault(_wchar);
 
 var makeEmptyWString = _ramda2['default'].always([_wchar2['default'].beginningChar, _wchar2['default'].endingChar]);
 
+var getVisibleChars = _ramda2['default'].filter(_ramda2['default'].propEq('isVisible', true));
+
+var show = _ramda2['default'].compose(_ramda2['default'].join(''), _ramda2['default'].pluck('alpha'), getVisibleChars);
+
+var insert = _ramda2['default'].insert;
+
+var subsection = function subsection(idA, idB, wString) {
+  var indexA = _ramda2['default'].findIndex(_ramda2['default'].propEq('id', idA), wString);
+  var indexB = _ramda2['default'].findIndex(_ramda2['default'].propEq('id', idB), wString);
+
+  if (indexA !== -1 && indexA < indexB) {
+    return _ramda2['default'].slice(indexA, indexB, wString);
+  }
+
+  return [];
+};
+
 exports['default'] = {
-  makeEmptyWString: makeEmptyWString
+  makeEmptyWString: makeEmptyWString,
+  show: show,
+  insert: insert,
+  subsection: subsection
 };
 module.exports = exports['default'];
 //# sourceMappingURL=../woot/wstring.js.map

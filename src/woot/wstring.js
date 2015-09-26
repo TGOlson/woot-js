@@ -110,6 +110,30 @@ import WChar from './wchar';
 
 const makeEmptyWString = R.always([WChar.beginningChar, WChar.endingChar]);
 
+const getVisibleChars = R.filter(R.propEq('isVisible', true));
+
+const show = R.compose(
+  R.join(''),
+  R.pluck('alpha'),
+  getVisibleChars
+);
+
+const insert = R.insert;
+
+const subsection = (idA, idB, wString) => {
+  const indexA = R.findIndex(R.propEq('id', idA), wString);
+  const indexB = R.findIndex(R.propEq('id', idB), wString);
+
+  if (indexA !== -1 && (indexA < indexB)) {
+    return R.slice(indexA, indexB, wString);
+  }
+
+  return [];
+};
+
 export default {
-  makeEmptyWString
+  makeEmptyWString,
+  show,
+  insert,
+  subsection
 };

@@ -5,7 +5,7 @@
 // import Data.Woot.WChar
 // import Data.Woot.WString
 //
-import Operation from '../dist/woot/operation';
+// import Operation from '../dist/woot/operation';
 import WChar from '../dist/woot/wchar';
 //
 // mockWString :: WString
@@ -18,20 +18,49 @@ import WChar from '../dist/woot/wchar';
 //     , wCharEnding
 //     ]
 const mockWString = [
-
+  WChar.wCharBeginning,
+  WChar.makeWChar({
+    id: {clientId: 0, clock: 0},
+    isVisible: true,
+    alpha: 'b',
+    prevId: {clientId: -1, clock: 0},
+    nextId: {clientId: 0, clock: 1}
+  }),
+  WChar.makeWChar({
+    id: {clientId: 0, clock: 1},
+    isVisible: false,
+    alpha: 'x',
+    prevId: {clientId: 0, clock: 0},
+    nextId: {clientId: 0, clock: 2}
+  }),
+  WChar.makeWChar({
+    id: {clientId: 0, clock: 2},
+    isVisible: true,
+    alpha: 'a',
+    prevId: {clientId: 0, clock: 1},
+    nextId: {clientId: 0, clock: 3}
+  }),
+  WChar.makeWChar({
+    id: {clientId: 0, clock: 3},
+    isVisible: true,
+    alpha: 'r',
+    prevId: {clientId: 0, clock: 2},
+    nextId: {clientId: -1, clock: 1}
+  }),
+  WChar.wCharEnding
 ];
 //
 //
 // validInsertOp :: Operation
 // validInsertOp = Operation Insert 0
     // (WChar (WCharId 0 10) True 'q' (WCharId 0 2) (WCharId 0 3))
-const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
-  id: {},
-  visible: true,
-  alpha: 'a',
-  prevId: {},
-  nextId: {}
-}));
+// const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
+//   id: {},
+//   visible: true,
+//   alpha: 'a',
+//   prevId: {},
+//   nextId: {}
+// }));
 //
 //
 // validInsertOpAmbiguous :: Operation
@@ -68,6 +97,6 @@ const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
 //     (WChar (WCharId 0 100) True '#' (WCharId 0 50) (WCharId 0 3))
 
 export default {
-  mockWString,
-  validInsertOp
+  mockWString
+  // validInsertOp
 };

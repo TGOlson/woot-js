@@ -28,6 +28,7 @@
     "jasmine": "^2.3.2"
   },
   "dependencies": {
+    "o-validator": "^1.0.1",
     "ramda": "^0.17.1"
   }
 }
