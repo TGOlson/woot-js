@@ -85,7 +85,8 @@ exports['default'] = {
   wCharBeginning: wCharBeginning,
   wCharEnding: wCharEnding,
   hide: hide,
-  compareWCharIds: compareWCharIds
+  compareWCharIds: compareWCharIds,
+  wCharSchema: wCharSchema
 };
 module.exports = exports['default'];
 //# sourceMappingURL=../woot/wchar.js.map

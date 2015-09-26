@@ -2,11 +2,16 @@ import {
   mockWString,
   validInsertOp,
   validInsertOpAmbiguous,
-  validDeleteOp
+  validDeleteOp,
+  invalidInsertOp,
+  invalidDeleteOp,
+  validInsertToValidateDelete
 } from '../mock-data';
+
 
 import Core from '../../dist/woot/core';
 import WString from '../../dist/woot/wstring';
+
 
 describe('Core', () => {
   describe('integrate', () => {
@@ -27,41 +32,57 @@ describe('Core', () => {
         WString.show(
           Core.integrate(validDeleteOp, mockWString)
         )
-      ).toBe('ar'); // 'ar'
+      ).toBe('ar');
     });
 
     it('should not integrate an operation if given an invalid op', () => {
-      // integrate invalidInsertOp mockWString `shouldBe` Nothing
-      // integrate invalidDeleteOp mockWString `shouldBe` Nothing
+      expect(
+        Core.integrate(invalidInsertOp, mockWString)
+      ).toBe(null);
+
+      expect(
+        Core.integrate(invalidDeleteOp, mockWString)
+      ).toBe(null);
     });
 
     it('should accept multiple inserts of the same char with no affect', () => {
-      // let (Just newString) = integrate validInsertOp mockWString
-      // integrate validInsertOp newString `shouldShowJust` "baqr"
+      const newString = Core.integrate(validInsertOp, mockWString);
+
+      expect(
+        WString.show(
+          Core.integrate(validInsertOp, newString)
+        )
+      ).toBe('baqr');
     });
 
     it('should accept multiple deletes of the same char with no affect', () => {
-      // let (Just newString) = integrate validDeleteOp mockWString
-      // integrate validDeleteOp newString `shouldShowJust` "ar"
+      const newString = Core.integrate(validDeleteOp, mockWString);
+
+      expect(
+        WString.show(
+          Core.integrate(validDeleteOp, newString)
+        )
+      ).toBe('ar');
     });
   });
   describe('integrateAll', () => {
     it('should integrate a list of valid operations', () => {
-      // let (ops, wString) = integrateAll [validInsertOp, validDeleteOp] mockWString
-      // ops `shouldBe` []
-      // show wString `shouldBe` "aqr"
+      const {operations, wString} = Core.integrateAll([validInsertOp, validDeleteOp], mockWString);
+      expect(operations).toEqual([]);
+      expect(WString.show(wString)).toBe('aqr');
     });
 
     it('should return any invalid operations', () => {
-      // let (ops, wString) = integrateAll [invalidInsertOp, invalidDeleteOp] mockWString
-      // ops `shouldBe` [invalidInsertOp, invalidDeleteOp]
-      // show wString `shouldBe` "bar"
+      const {operations, wString} = Core.integrateAll([invalidInsertOp, invalidDeleteOp], mockWString);
+      expect(operations).toEqual([invalidInsertOp, invalidDeleteOp]);
+      expect(WString.show(wString)).toBe('bar');
     });
 
     it('should recurse if an operation is made valid by a later operation', () => {
-      // let (ops, wString) = integrateAll [invalidInsertOp, invalidDeleteOp, validInsertToValidateDelete] mockWString
-      // ops `shouldBe` [invalidInsertOp]
-      // show wString `shouldBe` "bar"
+      const ops = [invalidInsertOp, invalidDeleteOp, validInsertToValidateDelete];
+      const {operations, wString} = Core.integrateAll(ops, mockWString);
+      expect(operations).toEqual([invalidInsertOp]);
+      expect(WString.show(wString)).toBe('bar');
     });
   });
 });

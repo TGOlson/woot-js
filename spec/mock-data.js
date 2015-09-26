@@ -1,6 +1,7 @@
 import Operation from '../dist/woot/operation';
 import WChar from '../dist/woot/wchar';
 
+
 const mockWString = [
   WChar.wCharBeginning,
   WChar.makeWChar({
@@ -34,6 +35,7 @@ const mockWString = [
   WChar.wCharEnding
 ];
 
+
 const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
   id: WChar.makeWCharId(0, 10),
   isVisible: true,
@@ -41,6 +43,7 @@ const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
   prevId: WChar.makeWCharId(0, 2),
   nextId: WChar.makeWCharId(0, 3)
 }));
+
 
 const validInsertOpAmbiguous = Operation.makeInsertOperation(0, WChar.makeWChar({
   id: WChar.makeWCharId(1, 0),
@@ -50,11 +53,14 @@ const validInsertOpAmbiguous = Operation.makeInsertOperation(0, WChar.makeWChar(
   nextId: WChar.makeWCharId(-1, 1)
 }));
 
-//
-//
-// invalidInsertOp :: Operation
-// invalidInsertOp = Operation Insert 0
-//     (WChar (WCharId 0 10) True '#' (WCharId 0 10) (WCharId 0 50))
+
+const invalidInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
+  id: WChar.makeWCharId(0, 10),
+  isVisible: true,
+  alpha: '#',
+  prevId: WChar.makeWCharId(0, 10),
+  nextId: WChar.makeWCharId(0, 50)
+}));
 //
 //
 //
@@ -69,6 +75,14 @@ const validDeleteOp = Operation.makeDeleteOperation(0, WChar.makeWChar({
   prevId: WChar.makeWCharId(0, -1),
   nextId: WChar.makeWCharId(0, 1)
 }));
+
+const invalidDeleteOp = Operation.makeDeleteOperation(0, WChar.makeWChar({
+  id: WChar.makeWCharId(0, 50),
+  isVisible: true,
+  alpha: 'M',
+  prevId: WChar.makeWCharId(0, -1),
+  nextId: WChar.makeWCharId(0, 1)
+}));
 //
 // -- will become valid after validInsertToValidateDelete
 // invalidDeleteOp :: Operation
@@ -80,7 +94,13 @@ const validDeleteOp = Operation.makeDeleteOperation(0, WChar.makeWChar({
 // validInsertToValidateDelete :: Operation
 // validInsertToValidateDelete = Operation Insert 0
 //     (WChar (WCharId 0 50) True 'M' (WCharId 0 0) (WCharId 0 2))
-//
+const validInsertToValidateDelete = Operation.makeInsertOperation(0, WChar.makeWChar({
+  id: WChar.makeWCharId(0, 50),
+  isVisible: true,
+  alpha: 'M',
+  prevId: WChar.makeWCharId(0, 0),
+  nextId: WChar.makeWCharId(0, 2)
+}));
 //
 // -- will become valid after validInsertToValidateDelete
 // validInsertAfterQueuedInsert :: Operation
@@ -91,5 +111,8 @@ export default {
   mockWString,
   validInsertOp,
   validInsertOpAmbiguous,
-  validDeleteOp
+  validDeleteOp,
+  invalidInsertOp,
+  invalidDeleteOp,
+  validInsertToValidateDelete
 };

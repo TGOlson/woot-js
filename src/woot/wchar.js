@@ -83,5 +83,6 @@ export default {
   wCharBeginning,
   wCharEnding,
   hide,
-  compareWCharIds
+  compareWCharIds,
+  wCharSchema
 };
