@@ -1,5 +1,5 @@
-import WChar from '../../src/woot/wchar';
-import WString from '../../src/woot/wstring';
+import WChar from '../../dist/woot/wchar';
+import WString from '../../dist/woot/wstring';
 
 import {mockWString} from '../mock-data';
 

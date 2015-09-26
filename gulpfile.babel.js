@@ -11,12 +11,9 @@ gulp.task('build', () => {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('test', (cb) => {
-  gulp.src('')
-    .pipe(shell('./node_modules/.bin/jasmine'))
-    .on('error', () => cb())
-    .on('end', () => cb());
-});
+gulp.task('test', shell.task('./node_modules/.bin/jasmine', {
+  ignoreErrors: true
+}));
 
 gulp.task('tdd', ['test'], () => {
   gulp.watch(['spec/**/*.js', 'dist/**/*.js'], ['test']);
@@ -26,4 +23,4 @@ gulp.task('watch', () => {
   gulp.watch(['src/**/*.js'], ['build']);
 });
 
-gulp.task('default', ['watch', 'tdd']);
+gulp.task('default', ['build', 'watch', 'tdd']);

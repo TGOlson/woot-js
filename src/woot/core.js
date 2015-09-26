@@ -15,6 +15,7 @@
 import R from 'ramda';
 
 import WString from './wstring';
+import WChar from './wchar';
 
 // matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
 const matchOperationType = (dict) => {
@@ -30,7 +31,7 @@ const matchOperationType = (dict) => {
 
 // canIntegrate :: Operation -> WString -> Bool
 const canIntegrate = matchOperationType({
-  insert: (wChar, wString) => {
+  insert: ({wChar}, wString) => {
     const containsPrev = WString.contains(wChar.prevId, wString);
     const containsNext = WString.contains(wChar.nextId, wString);
     return containsPrev && containsNext;
@@ -44,7 +45,7 @@ const canIntegrate = matchOperationType({
 // integrateOp :: Operation -> WString -> WString
 const integrateOp = matchOperationType({
   insert: ({wChar}, wString) => {
-    return integrateInsert(wChar.prevId, wChar.nextId, wString);
+    return integrateInsert(wChar.prevId, wChar.nextId, wChar, wString);
   },
   'delete': ({wChar}, wString) => {
     return integrateDelete(wChar, wString);
@@ -81,26 +82,35 @@ const integrateAll = function(operations, wString) {
 
 //
 // integrateInsert :: WCharId -> WCharId -> WChar -> WString -> WString
-// -- if char already exists
-// integrateInsert _ _ wc ws | contains (wCharId wc) ws = ws
-// integrateInsert prevId nextId wc ws = if isEmpty sub
-//     -- should always be safe to get index and insert since we have flagged this as 'canIntegrate'
-//     then insert wc (fromJust $ indexOf nextId ws) ws
-//     else compareIds $ map wCharId (toList sub) ++ [nextId]
-//   where
-//     sub = subsection prevId nextId ws
-//     compareIds :: [WCharId] -> WString
-//     -- current id is less than the previous id
-//     compareIds (wid:_) | wCharId wc < wid = insert wc (fromJust $ indexOf wid ws) ws
-//      -- recurse to integrateInsert with next id in the subsection
-//     compareIds (_:wid:_) = integrateInsert wid nextId wc ws
-//     -- should never have a match fall through to here, but for good measure...
-//     compareIds _  = ws
+const integrateInsert = (prevId, nextId, wChar, wString) => {
+  if (WString.contains(wChar.id, wString)) {
+    return wString;
+  }
+
+  const subsection = WString.subsection(prevId, nextId, wString);
+
+  if (R.isEmpty(subsection)) {
+    const index = WString.indexOf(nextId, wString);
+    return WString.insert(index, wChar, wString);
+  }
+
+  // if the current char id is less than the previous id
+  if (WChar.compareWCharIds(wChar.id, prevId) === -1) {
+    const index = WString.indexOf(prevId, wString);
+    return WString.insert(index, wChar, wString);
+  }
+
+  // recurse to integrateInsert with next id in the subsection
+  const newPrevId = R.head(subsection).id;
+  return integrateInsert(newPrevId, nextId, wChar, wString);
+};
+
 //
 //
 // integrateDelete :: WChar -> WString -> WString
-// integrateDelete wc = hideChar (wCharId wc)
-//
+const integrateDelete = ({id}, wString) => {
+  return WString.hideChar(id, wString);
+};
 //
 // makeDeleteOperation :: ClientId -> Int -> WString -> Maybe Operation
 // makeDeleteOperation cid pos ws = Operation Delete cid <$> nthVisible pos ws

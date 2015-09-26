@@ -30,6 +30,10 @@ var _wstring = require('./wstring');
 
 var _wstring2 = _interopRequireDefault(_wstring);
 
+var _wchar = require('./wchar');
+
+var _wchar2 = _interopRequireDefault(_wchar);
+
 // matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
 var matchOperationType = function matchOperationType(dict) {
   return function () {
@@ -48,13 +52,15 @@ var matchOperationType = function matchOperationType(dict) {
 
 // canIntegrate :: Operation -> WString -> Bool
 var canIntegrate = matchOperationType({
-  insert: function insert(wChar, wString) {
+  insert: function insert(_ref, wString) {
+    var wChar = _ref.wChar;
+
     var containsPrev = _wstring2['default'].contains(wChar.prevId, wString);
     var containsNext = _wstring2['default'].contains(wChar.nextId, wString);
     return containsPrev && containsNext;
   },
-  'delete': function _delete(_ref, wString) {
-    var wChar = _ref.wChar;
+  'delete': function _delete(_ref2, wString) {
+    var wChar = _ref2.wChar;
 
     return _wstring2['default'].contains(wChar.id, wString);
   }
@@ -62,13 +68,13 @@ var canIntegrate = matchOperationType({
 
 // integrateOp :: Operation -> WString -> WString
 var integrateOp = matchOperationType({
-  insert: function insert(_ref2, wString) {
-    var wChar = _ref2.wChar;
-
-    return integrateInsert(wChar.prevId, wChar.nextId, wString);
-  },
-  'delete': function _delete(_ref3, wString) {
+  insert: function insert(_ref3, wString) {
     var wChar = _ref3.wChar;
+
+    return integrateInsert(wChar.prevId, wChar.nextId, wChar, wString);
+  },
+  'delete': function _delete(_ref4, wString) {
+    var wChar = _ref4.wChar;
 
     return integrateDelete(wChar, wString);
   }
@@ -99,11 +105,11 @@ var integrateAll = function integrateAll(_x, _x2) {
     integrate_ = _R$reduce = _R$reduce2 = newOps = s = undefined;
     _again = false;
 
-    var integrate_ = function integrate_(_ref4, op) {
-      var _ref42 = _slicedToArray(_ref4, 2);
+    var integrate_ = function integrate_(_ref5, op) {
+      var _ref52 = _slicedToArray(_ref5, 2);
 
-      var ops = _ref42[0];
-      var s = _ref42[1];
+      var ops = _ref52[0];
+      var s = _ref52[1];
 
       var res = integrate(op, s);
       return res ? [ops, res] : [_ramda2['default'].append(op, ops), s];
@@ -128,26 +134,53 @@ var integrateAll = function integrateAll(_x, _x2) {
 
 //
 // integrateInsert :: WCharId -> WCharId -> WChar -> WString -> WString
-// -- if char already exists
-// integrateInsert _ _ wc ws | contains (wCharId wc) ws = ws
-// integrateInsert prevId nextId wc ws = if isEmpty sub
-//     -- should always be safe to get index and insert since we have flagged this as 'canIntegrate'
-//     then insert wc (fromJust $ indexOf nextId ws) ws
-//     else compareIds $ map wCharId (toList sub) ++ [nextId]
-//   where
-//     sub = subsection prevId nextId ws
-//     compareIds :: [WCharId] -> WString
-//     -- current id is less than the previous id
-//     compareIds (wid:_) | wCharId wc < wid = insert wc (fromJust $ indexOf wid ws) ws
-//      -- recurse to integrateInsert with next id in the subsection
-//     compareIds (_:wid:_) = integrateInsert wid nextId wc ws
-//     -- should never have a match fall through to here, but for good measure...
-//     compareIds _  = ws
+var integrateInsert = function integrateInsert(_x3, _x4, _x5, _x6) {
+  var _again2 = true;
+
+  _function2: while (_again2) {
+    var prevId = _x3,
+        nextId = _x4,
+        wChar = _x5,
+        wString = _x6;
+    subsection = index = index = newPrevId = undefined;
+    _again2 = false;
+
+    if (_wstring2['default'].contains(wChar.id, wString)) {
+      return wString;
+    }
+
+    var subsection = _wstring2['default'].subsection(prevId, nextId, wString);
+
+    if (_ramda2['default'].isEmpty(subsection)) {
+      var index = _wstring2['default'].indexOf(nextId, wString);
+      return _wstring2['default'].insert(index, wChar, wString);
+    }
+
+    // if the current char id is less than the previous id
+    if (_wchar2['default'].compareWCharIds(wChar.id, prevId) === -1) {
+      var index = _wstring2['default'].indexOf(prevId, wString);
+      return _wstring2['default'].insert(index, wChar, wString);
+    }
+
+    // recurse to integrateInsert with next id in the subsection
+    var newPrevId = _ramda2['default'].head(subsection).id;
+    _x3 = newPrevId;
+    _x4 = nextId;
+    _x5 = wChar;
+    _x6 = wString;
+    _again2 = true;
+    continue _function2;
+  }
+};
+
 //
 //
 // integrateDelete :: WChar -> WString -> WString
-// integrateDelete wc = hideChar (wCharId wc)
-//
+var integrateDelete = function integrateDelete(_ref6, wString) {
+  var id = _ref6.id;
+
+  return _wstring2['default'].hideChar(id, wString);
+};
 //
 // makeDeleteOperation :: ClientId -> Int -> WString -> Maybe Operation
 // makeDeleteOperation cid pos ws = Operation Delete cid <$> nthVisible pos ws
