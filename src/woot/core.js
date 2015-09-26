@@ -1,8 +1,9 @@
 import R from 'ramda';
 
 
-import WString from './wstring';
+import Operation from './operation';
 import WChar from './wchar';
+import WString from './wstring';
 
 
 // matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
@@ -84,7 +85,7 @@ const integrate = (operation, wString) => {
 // integrateAll :: [Operation] -> WString -> {operations: [Operation], wString: WString}
 const integrateAll = (initialOps, initialWString) => {
   // no operations have been integrated
-  // and wString is in it's initial value
+  // and wString has its initial value
   const initialState = {operations: [], wString: initialWString};
 
   const integrate_ = ({operations, wString}, op) => {
@@ -101,7 +102,47 @@ const integrateAll = (initialOps, initialWString) => {
 };
 
 
+// makeDeleteOperation :: ClientId -> Int -> WString -> Operation | null
+const makeDeleteOperation = (clientId, position, wString) => {
+  const wChar = WString.nthVisible(position, wString);
+
+  return wChar ? Operation.makeDeleteOperation(clientId, wChar) : null;
+};
+
+
+// position based of off visible characters only
+// operations should only be concerned with the visible string
+// makeInsertOperation :: WCharId -> Int -> Char -> WString -> Operation | null
+const makeInsertOperation = (wCharId, position, alpha, wString) => {
+  const numVisible = WString.show(wString).length;
+
+  const prev = position === 0
+    ? R.head(wString)
+    : WString.nthVisible(position - 1, wString);
+
+  const next = position === numVisible
+    ? R.last(wString)
+    : WString.nthVisible(position, wString);
+
+  if (prev && next) {
+    const wChar = WChar.makeWChar({
+      id: wCharId,
+      isVisible: true,
+      alpha,
+      prevId: prev.id,
+      nextId: next.id
+    });
+
+    return Operation.makeInsertOperation(wCharId.clientId, wChar);
+  }
+
+  return null;
+};
+
+
 export default {
   integrate,
-  integrateAll
+  integrateAll,
+  makeInsertOperation,
+  makeDeleteOperation
 };

@@ -28,5 +28,6 @@ const makeDeleteOperation = makeOperation(DELETE_OP_TYPE);
 
 export default {
   makeInsertOperation,
-  makeDeleteOperation
+  makeDeleteOperation,
+  operationSchema
 };

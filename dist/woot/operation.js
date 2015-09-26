@@ -36,7 +36,8 @@ var makeDeleteOperation = makeOperation(DELETE_OP_TYPE);
 
 exports['default'] = {
   makeInsertOperation: makeInsertOperation,
-  makeDeleteOperation: makeDeleteOperation
+  makeDeleteOperation: makeDeleteOperation,
+  operationSchema: operationSchema
 };
 module.exports = exports['default'];
 //# sourceMappingURL=../woot/operation.js.map

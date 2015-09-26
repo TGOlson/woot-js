@@ -61,12 +61,7 @@ const invalidInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
   prevId: WChar.makeWCharId(0, 10),
   nextId: WChar.makeWCharId(0, 50)
 }));
-//
-//
-//
-// validDeleteOp :: Operation
-// validDeleteOp = Operation Delete 0
-//     (WChar (WCharId 0 0) True 'b' (WCharId 0 (-1)) (WCharId 0 1))
+
 
 const validDeleteOp = Operation.makeDeleteOperation(0, WChar.makeWChar({
   id: WChar.makeWCharId(0, 0),
@@ -76,24 +71,18 @@ const validDeleteOp = Operation.makeDeleteOperation(0, WChar.makeWChar({
   nextId: WChar.makeWCharId(0, 1)
 }));
 
+
+// -- will become valid after validInsertToValidateDelete
 const invalidDeleteOp = Operation.makeDeleteOperation(0, WChar.makeWChar({
   id: WChar.makeWCharId(0, 50),
   isVisible: true,
   alpha: 'M',
-  prevId: WChar.makeWCharId(0, -1),
-  nextId: WChar.makeWCharId(0, 1)
+  prevId: WChar.makeWCharId(0, 0),
+  nextId: WChar.makeWCharId(0, 2)
 }));
-//
-// -- will become valid after validInsertToValidateDelete
-// invalidDeleteOp :: Operation
-// invalidDeleteOp = Operation Delete 0
-//     (WChar (WCharId 0 50) True 'M' (WCharId 0 (-1)) (WCharId 0 1))
-//
-//
+
+
 // -- will make invalid delete operation valid
-// validInsertToValidateDelete :: Operation
-// validInsertToValidateDelete = Operation Insert 0
-//     (WChar (WCharId 0 50) True 'M' (WCharId 0 0) (WCharId 0 2))
 const validInsertToValidateDelete = Operation.makeInsertOperation(0, WChar.makeWChar({
   id: WChar.makeWCharId(0, 50),
   isVisible: true,
@@ -101,11 +90,17 @@ const validInsertToValidateDelete = Operation.makeInsertOperation(0, WChar.makeW
   prevId: WChar.makeWCharId(0, 0),
   nextId: WChar.makeWCharId(0, 2)
 }));
-//
-// -- will become valid after validInsertToValidateDelete
-// validInsertAfterQueuedInsert :: Operation
-// validInsertAfterQueuedInsert = Operation Insert 0
-//     (WChar (WCharId 0 100) True '#' (WCharId 0 50) (WCharId 0 3))
+
+
+// will become valid after validInsertToValidateDelete
+const validInsertAfterQueuedInsert = Operation.makeInsertOperation(0, WChar.makeWChar({
+  id: WChar.makeWCharId(0, 100),
+  isVisible: true,
+  alpha: '#',
+  prevId: WChar.makeWCharId(0, 50),
+  nextId: WChar.makeWCharId(0, 3)
+}));
+
 
 export default {
   mockWString,
@@ -114,5 +109,6 @@ export default {
   validDeleteOp,
   invalidInsertOp,
   invalidDeleteOp,
-  validInsertToValidateDelete
+  validInsertToValidateDelete,
+  validInsertAfterQueuedInsert
 };

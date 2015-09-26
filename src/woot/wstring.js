@@ -1,45 +1,15 @@
-// module Data.Woot.WString
-//     ( WString
-//     -- Construction
-//     , emptyWString
-//     , fromList
-//     , toList
-//
-//     -- General WString operations
-//     , lengthWS
-//     , (!?)
-//     , indexOf
-//     , insert
-//     , subsection
-//     , contains
-//     , isEmpty
-//     , nthVisible
-//
-//     -- Special utilities
-//     , hideChar
-//     ) where
-//
-//
-// nthVisible :: Int -> WString -> Maybe WChar
-// nthVisible n = (!? n) . visibleChars
-//
-//
-//
-// hideChar :: WCharId -> WString -> WString
-// hideChar wid ws@(WString wcs) = WString $
-//     maybe wcs (\i -> wcs V.// [(i, hide $ ws ! i)]) mindex
-//   where
-//     mindex = indexOf wid ws
-
 import R from 'ramda';
 
 import WChar from './wchar';
 
+
 // makeEmptyWString :: WString
-const makeEmptyWString = R.always([WChar.beginningChar, WChar.endingChar]);
+const makeEmptyWString = () => [WChar.wCharBeginning, WChar.wCharEnding];
+
 
 // getVisibleChars :: WString -> WString
 const getVisibleChars = R.filter(R.propEq('isVisible', true));
+
 
 // show :: WString -> String
 const show = R.compose(
@@ -47,6 +17,7 @@ const show = R.compose(
   R.pluck('alpha'),
   getVisibleChars
 );
+
 
 // -- insert before index i
 // -- insert 2 'x' "abc" -> abxc
@@ -60,10 +31,12 @@ const indexOf = (id, wString) => {
   return index === -1 ? null : index;
 };
 
+
 // contains :: WCharId -> WString -> Bool
 const contains = (id, wString) => {
   return indexOf(id, wString) !== null;
 };
+
 
 // subsection :: WCharId -> WCharId -> WString -> WString
 const subsection = (idA, idB, wString) => {
@@ -78,6 +51,12 @@ const subsection = (idA, idB, wString) => {
 };
 
 
+// nthVisible :: Int -> WString -> WChar | null
+const nthVisible = (i, wString) => {
+  return getVisibleChars(wString)[i];
+};
+
+
 // hideChar :: WCharId -> WString -> WString
 const hideChar = (id, wString) => {
   const index = indexOf(id, wString);
@@ -85,17 +64,20 @@ const hideChar = (id, wString) => {
 
   return index ? R.update(index, wChar, wString) : wString;
 };
-// hideChar wid ws@(WString wcs) = WString $
-//     maybe wcs (\i -> wcs V.// [(i, hide $ ws ! i)]) mindex
-//   where
-//     mindex = indexOf wid ws
+
 
 export default {
+  // Construction
   makeEmptyWString,
+
+  // General WString operations
   show,
+  indexOf,
   insert,
   subsection,
   contains,
-  indexOf,
+  nthVisible,
+
+  // Special utilities
   hideChar
 };

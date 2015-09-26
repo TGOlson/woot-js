@@ -10,13 +10,17 @@ var _ramda = require('ramda');
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _wstring = require('./wstring');
+var _operation = require('./operation');
 
-var _wstring2 = _interopRequireDefault(_wstring);
+var _operation2 = _interopRequireDefault(_operation);
 
 var _wchar = require('./wchar');
 
 var _wchar2 = _interopRequireDefault(_wchar);
+
+var _wstring = require('./wstring');
+
+var _wstring2 = _interopRequireDefault(_wstring);
 
 // matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
 var matchOperationType = function matchOperationType(dict) {
@@ -129,7 +133,7 @@ var integrateAll = function integrateAll(_x5, _x6) {
     _again2 = false;
 
     // no operations have been integrated
-    // and wString is in it's initial value
+    // and wString has its initial value
     var initialState = { operations: [], wString: initialWString };
 
     var integrate_ = function integrate_(_ref6, op) {
@@ -157,9 +161,43 @@ var integrateAll = function integrateAll(_x5, _x6) {
   }
 };
 
+// makeDeleteOperation :: ClientId -> Int -> WString -> Operation | null
+var makeDeleteOperation = function makeDeleteOperation(clientId, position, wString) {
+  var wChar = _wstring2['default'].nthVisible(position, wString);
+
+  return wChar ? _operation2['default'].makeDeleteOperation(clientId, wChar) : null;
+};
+
+// position based of off visible characters only
+// operations should only be concerned with the visible string
+// makeInsertOperation :: WCharId -> Int -> Char -> WString -> Operation | null
+var makeInsertOperation = function makeInsertOperation(wCharId, position, alpha, wString) {
+  var numVisible = _wstring2['default'].show(wString).length;
+
+  var prev = position === 0 ? _ramda2['default'].head(wString) : _wstring2['default'].nthVisible(position - 1, wString);
+
+  var next = position === numVisible ? _ramda2['default'].last(wString) : _wstring2['default'].nthVisible(position, wString);
+
+  if (prev && next) {
+    var wChar = _wchar2['default'].makeWChar({
+      id: wCharId,
+      isVisible: true,
+      alpha: alpha,
+      prevId: prev.id,
+      nextId: next.id
+    });
+
+    return _operation2['default'].makeInsertOperation(wCharId.clientId, wChar);
+  }
+
+  return null;
+};
+
 exports['default'] = {
   integrate: integrate,
-  integrateAll: integrateAll
+  integrateAll: integrateAll,
+  makeInsertOperation: makeInsertOperation,
+  makeDeleteOperation: makeDeleteOperation
 };
 module.exports = exports['default'];
 //# sourceMappingURL=../woot/core.js.map

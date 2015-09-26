@@ -1,36 +1,3 @@
-// module Data.Woot.WString
-//     ( WString
-//     -- Construction
-//     , emptyWString
-//     , fromList
-//     , toList
-//
-//     -- General WString operations
-//     , lengthWS
-//     , (!?)
-//     , indexOf
-//     , insert
-//     , subsection
-//     , contains
-//     , isEmpty
-//     , nthVisible
-//
-//     -- Special utilities
-//     , hideChar
-//     ) where
-//
-//
-// nthVisible :: Int -> WString -> Maybe WChar
-// nthVisible n = (!? n) . visibleChars
-//
-//
-//
-// hideChar :: WCharId -> WString -> WString
-// hideChar wid ws@(WString wcs) = WString $
-//     maybe wcs (\i -> wcs V.// [(i, hide $ ws ! i)]) mindex
-//   where
-//     mindex = indexOf wid ws
-
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -48,7 +15,9 @@ var _wchar = require('./wchar');
 var _wchar2 = _interopRequireDefault(_wchar);
 
 // makeEmptyWString :: WString
-var makeEmptyWString = _ramda2['default'].always([_wchar2['default'].beginningChar, _wchar2['default'].endingChar]);
+var makeEmptyWString = function makeEmptyWString() {
+  return [_wchar2['default'].wCharBeginning, _wchar2['default'].wCharEnding];
+};
 
 // getVisibleChars :: WString -> WString
 var getVisibleChars = _ramda2['default'].filter(_ramda2['default'].propEq('isVisible', true));
@@ -84,6 +53,11 @@ var subsection = function subsection(idA, idB, wString) {
   return [];
 };
 
+// nthVisible :: Int -> WString -> WChar | null
+var nthVisible = function nthVisible(i, wString) {
+  return getVisibleChars(wString)[i];
+};
+
 // hideChar :: WCharId -> WString -> WString
 var hideChar = function hideChar(id, wString) {
   var index = indexOf(id, wString);
@@ -91,18 +65,20 @@ var hideChar = function hideChar(id, wString) {
 
   return index ? _ramda2['default'].update(index, wChar, wString) : wString;
 };
-// hideChar wid ws@(WString wcs) = WString $
-//     maybe wcs (\i -> wcs V.// [(i, hide $ ws ! i)]) mindex
-//   where
-//     mindex = indexOf wid ws
 
 exports['default'] = {
+  // Construction
   makeEmptyWString: makeEmptyWString,
+
+  // General WString operations
   show: show,
+  indexOf: indexOf,
   insert: insert,
   subsection: subsection,
   contains: contains,
-  indexOf: indexOf,
+  nthVisible: nthVisible,
+
+  // Special utilities
   hideChar: hideChar
 };
 module.exports = exports['default'];
