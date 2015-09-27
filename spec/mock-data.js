@@ -1,9 +1,8 @@
 import Operation from '../src/woot/operation';
 import WChar from '../src/woot/wchar';
+import WString from '../src/woot/wstring';
 
-
-const mockWString = [
-  WChar.wCharBeginning,
+const mockWString = WString.makeWStringFromWChars([
   WChar.makeWChar({
     id: WChar.makeWCharId(0, 0),
     isVisible: true,
@@ -31,9 +30,8 @@ const mockWString = [
     alpha: 'r',
     prevId: WChar.makeWCharId(0, 2),
     nextId: WChar.makeWCharId(-1, 1)
-  }),
-  WChar.wCharEnding
-];
+  })
+]);
 
 
 const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({

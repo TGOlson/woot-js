@@ -6,8 +6,33 @@ import WChar from './wchar';
 const isDefined = R.complement(R.isNil);
 
 
+// updateIdCache :: WCharId -> WString -> WString
+const updateIdCache = ({clientId, clock}, wString) => {
+  const cache = wString.__idCache || {};
+
+  // a little mutation here
+  // but it's worth it for the performance boosts
+  cache[clientId] = cache[clientId] || {};
+  cache[clientId][clock] = true;
+
+  wString.__idCache = cache;
+
+  return wString;
+};
+
+
+// makeWStringFromWChars :: [WChar] -> WString
+const makeWStringFromWChars = (chars) => {
+  const wString = R.insertAll(1, chars, [WChar.wCharBeginning, WChar.wCharEnding]);
+  wString.__idCache = {};
+  return R.reduce((s, {id}) => updateIdCache(id, s), wString, chars);
+};
+
+
 // makeEmptyWString :: WString
-const makeEmptyWString = () => [WChar.wCharBeginning, WChar.wCharEnding];
+const makeEmptyWString = () => {
+  return makeWStringFromWChars([]);
+};
 
 
 // show :: WString -> String
@@ -28,11 +53,30 @@ const show = (wString) => {
 // -- insert before index i
 // -- insert 2 'x' "abc" -> abxc
 // insert :: Int -> WChar -> WString -> WString
-const insert = R.insert;
+const insert = (i, wChar, wString) => {
+  return updateIdCache(
+    wChar.id, R.insert(i, wChar, wString)
+  );
+};
+
+
+const isInCache = (id, wString) => {
+  if (wString.__idCache) {
+    const {clientId, clock} = id;
+    // const inCache = R.path(['__idCache', clientId, clock], wString) === true;
+
+    if (wString.__idCache && wString.__idCache[clientId] && wString.__idCache[clientId[clock]]) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 
 // indexOf :: WCharId -> WString -> Int | null
 const indexOf = (id, wString) => {
+  // TODO: use 'contains' first once that is more reliable
   const index = R.findIndex((wChar) => {
     return WChar.compareWCharIds(id, wChar.id) === 0;
   }, wString);
@@ -43,7 +87,7 @@ const indexOf = (id, wString) => {
 
 // contains :: WCharId -> WString -> Bool
 const contains = (id, wString) => {
-  return indexOf(id, wString) !== null;
+  return isInCache(id, wString) ? true : indexOf(id, wString) !== null;
 };
 
 
@@ -95,6 +139,7 @@ const hideChar = (id, wString) => {
 export default {
   // Construction
   makeEmptyWString,
+  makeWStringFromWChars,
 
   // General WString operations
   show,
