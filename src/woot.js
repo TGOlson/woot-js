@@ -124,5 +124,5 @@ export default {
   Operation,
 
   // meta meta
-  __version: '0.0.0'
+  __version: '0.0.1'
 };
