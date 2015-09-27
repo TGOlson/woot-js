@@ -50,7 +50,7 @@ describe('Woot', () => {
       ];
 
       let client = Woot.sendOperations(wootClient, ops);
-      expect(Woot.showClientString(client)).toBe('aq#rW');
+      expect(Woot.showClientString(client)).toBe('Waq#r');
     });
   });
 

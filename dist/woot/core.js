@@ -71,6 +71,7 @@ var integrateInsert = function integrateInsert(_x, _x2, _x3, _x4) {
     }
 
     var subsection = _wstring2['default'].subsection(prevId, nextId, wString);
+    // console.log(prevId, nextId, subsection);
 
     if (_ramda2['default'].isEmpty(subsection)) {
       var index = _wstring2['default'].indexOf(nextId, wString);

@@ -14,6 +14,8 @@ var _wchar = require('./wchar');
 
 var _wchar2 = _interopRequireDefault(_wchar);
 
+var isDefined = _ramda2['default'].complement(_ramda2['default'].isNil);
+
 // makeEmptyWString :: WString
 var makeEmptyWString = function makeEmptyWString() {
   return [_wchar2['default'].wCharBeginning, _wchar2['default'].wCharEnding];
@@ -46,7 +48,7 @@ var subsection = function subsection(idA, idB, wString) {
   var indexA = indexOf(idA, wString);
   var indexB = indexOf(idB, wString);
 
-  if (indexA && indexB && indexA < indexB) {
+  if (isDefined(indexA) && isDefined(indexB) && indexA < indexB) {
     return _ramda2['default'].slice(indexA + 1, indexB, wString);
   }
 

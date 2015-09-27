@@ -3,6 +3,9 @@ import R from 'ramda';
 import WChar from './wchar';
 
 
+const isDefined = R.complement(R.isNil);
+
+
 // makeEmptyWString :: WString
 const makeEmptyWString = () => [WChar.wCharBeginning, WChar.wCharEnding];
 
@@ -43,7 +46,7 @@ const subsection = (idA, idB, wString) => {
   const indexA = indexOf(idA, wString);
   const indexB = indexOf(idB, wString);
 
-  if (indexA && indexB && (indexA < indexB)) {
+  if (isDefined(indexA) && isDefined(indexB) && (indexA < indexB)) {
     return R.slice(indexA + 1, indexB, wString);
   }
 

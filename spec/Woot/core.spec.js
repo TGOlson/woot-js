@@ -26,7 +26,7 @@ describe('Core', () => {
         WString.show(
           Core.integrate(validInsertOpAmbiguous, mockWString)
         )
-      ).toBe('barW');
+      ).toBe('bWar');
 
       expect(
         WString.show(

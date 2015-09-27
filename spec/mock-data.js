@@ -46,7 +46,8 @@ const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
 
 
 const validInsertOpAmbiguous = Operation.makeInsertOperation(0, WChar.makeWChar({
-  id: WChar.makeWCharId(1, 0),
+  // cheating on the id, but fits into the string in a convenient way
+  id: WChar.makeWCharId(0, 1.5),
   isVisible: true,
   alpha: 'W',
   prevId: WChar.makeWCharId(-1, 0),
