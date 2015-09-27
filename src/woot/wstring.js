@@ -10,16 +10,19 @@ const isDefined = R.complement(R.isNil);
 const makeEmptyWString = () => [WChar.wCharBeginning, WChar.wCharEnding];
 
 
-// getVisibleChars :: WString -> WString
-const getVisibleChars = R.filter(R.propEq('isVisible', true));
-
-
 // show :: WString -> String
-const show = R.compose(
-  R.join(''),
-  R.pluck('alpha'),
-  getVisibleChars
-);
+const show = (wString) => {
+  let i = 0;
+  let str = '';
+
+  for (; i < wString.length; i++) {
+    if (wString[i].isVisible) {
+      str += wString[i].alpha;
+    }
+  }
+
+  return str;
+};
 
 
 // -- insert before index i

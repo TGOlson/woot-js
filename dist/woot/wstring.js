@@ -21,11 +21,19 @@ var makeEmptyWString = function makeEmptyWString() {
   return [_wchar2['default'].wCharBeginning, _wchar2['default'].wCharEnding];
 };
 
-// getVisibleChars :: WString -> WString
-var getVisibleChars = _ramda2['default'].filter(_ramda2['default'].propEq('isVisible', true));
-
 // show :: WString -> String
-var show = _ramda2['default'].compose(_ramda2['default'].join(''), _ramda2['default'].pluck('alpha'), getVisibleChars);
+var show = function show(wString) {
+  var i = 0;
+  var str = '';
+
+  for (; i < wString.length; i++) {
+    if (wString[i].isVisible) {
+      str += wString[i].alpha;
+    }
+  }
+
+  return str;
+};
 
 // -- insert before index i
 // -- insert 2 'x' "abc" -> abxc
