@@ -123,7 +123,7 @@ exports['default'] = {
   Operation: _wootOperation2['default'],
 
   // meta meta
-  __version: '0.0.3'
+  __version: '0.0.4'
 };
 module.exports = exports['default'];
 //# sourceMappingURL=woot.js.map
