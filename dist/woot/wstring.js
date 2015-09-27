@@ -76,6 +76,10 @@ var nthVisible = function nthVisible(i, wString) {
   }
 
   for (; numFound < i + 1; j++) {
+    if (!wString[j]) {
+      return null;
+    }
+
     if (wString[j].isVisible) {
       numFound++;
     }

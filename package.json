@@ -1,6 +1,6 @@
 {
   "name": "woot-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Core library for creating real time collaborative documents without Operational transformation (WOOT). This package provides the core logic and data types for building a server capable and handling real time editing with WOOT.",
   "main": "index.js",
   "scripts": {
