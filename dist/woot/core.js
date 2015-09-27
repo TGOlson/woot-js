@@ -116,6 +116,33 @@ var integrateOp = matchOperationType({
   }
 });
 
+// integrateAllWith
+// :: (Operation -> WString -> WString | nul)
+// -> [Operation] -> WString
+// -> WString -> {operations: [Operation], wString: WString}
+var integrateAllWith = _ramda2['default'].curry(function (integrationFn, initialOps, initialWString) {
+  // no operations have been integrated
+  // and wString has its initial value
+  var initialState = { operations: [], wString: initialWString };
+
+  var integrate_ = function integrate_(_ref6, op) {
+    var operations = _ref6.operations;
+    var wString = _ref6.wString;
+
+    var newString = integrationFn(op, wString);
+    return newString ? { operations: operations, wString: newString } : { operations: _ramda2['default'].append(op, operations), wString: wString };
+  };
+
+  var _R$reduce = _ramda2['default'].reduce(integrate_, initialState, initialOps);
+
+  var operations = _R$reduce.operations;
+  var wString = _R$reduce.wString;
+
+  var operationsAreStable = _ramda2['default'].length(initialOps) === _ramda2['default'].length(operations);
+
+  return operationsAreStable ? { operations: operations, wString: wString } : integrateAllWith(integrationFn, operations, wString);
+});
+
 // integrate :: Operation -> WString -> WString | null
 var integrate = function integrate(operation, wString) {
   return canIntegrate(operation, wString) ? integrateOp(operation, wString) : null;
@@ -124,43 +151,15 @@ var integrate = function integrate(operation, wString) {
 // iterate through operation list until stable
 // return any remaining operations, along with new string
 // integrateAll :: [Operation] -> WString -> {operations: [Operation], wString: WString}
-var integrateAll = function integrateAll(_x5, _x6) {
-  var _again2 = true;
+var integrateAll = integrateAllWith(integrate);
 
-  _function2: while (_again2) {
-    var initialOps = _x5,
-        initialWString = _x6;
-    initialState = integrate_ = _R$reduce = operations = wString = operationsAreStable = undefined;
-    _again2 = false;
+// this function acts under the assumption that local operations have already been validated
+// integrateLocal :: Operation -> WString -> WString
+var integrateLocal = integrateOp;
 
-    // no operations have been integrated
-    // and wString has its initial value
-    var initialState = { operations: [], wString: initialWString };
-
-    var integrate_ = function integrate_(_ref6, op) {
-      var operations = _ref6.operations;
-      var wString = _ref6.wString;
-
-      var newString = integrate(op, wString);
-      return newString ? { operations: operations, wString: newString } : { operations: _ramda2['default'].append(op, operations), wString: wString };
-    };
-
-    var _R$reduce = _ramda2['default'].reduce(integrate_, initialState, initialOps);
-
-    var operations = _R$reduce.operations;
-    var wString = _R$reduce.wString;
-
-    var operationsAreStable = _ramda2['default'].length(initialOps) === _ramda2['default'].length(operations);
-    if (operationsAreStable) {
-      return { operations: operations, wString: wString };
-    } else {
-      _x5 = operations;
-      _x6 = wString;
-      _again2 = true;
-      continue _function2;
-    }
-  }
-};
+// this function acts under the assumption that local operations have already been validated
+// integrateAllLocal :: [Operation] -> WString -> WString
+var integrateAllLocal = integrateAllWith(integrateLocal);
 
 // makeDeleteOperation :: ClientId -> Int -> WString -> Operation | null
 var makeDeleteOperation = function makeDeleteOperation(clientId, position, wString) {
@@ -197,6 +196,8 @@ var makeInsertOperation = function makeInsertOperation(wCharId, position, alpha,
 exports['default'] = {
   integrate: integrate,
   integrateAll: integrateAll,
+  integrateLocal: integrateLocal,
+  integrateAllLocal: integrateAllLocal,
   makeInsertOperation: makeInsertOperation,
   makeDeleteOperation: makeDeleteOperation
 };

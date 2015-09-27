@@ -1,19 +1,10 @@
 import R from 'ramda';
-import V from 'o-validator';
 
 
 import Core from './woot/core';
 import Operation from './woot/operation';
 import WChar from './woot/wchar';
 import WString from './woot/wstring';
-
-
-const wootClientSchema = {
-  clientId: V.required(R.is(Number)),
-  clock: V.required(R.is(Number)),
-  wString: V.required(R.all(V.validate(WChar.wCharSchema))),
-  operationQueue: V.required(R.all(V.validate(Operation.operationSchema)))
-};
 
 
 // incClock :: WootClient -> WootClient
@@ -31,12 +22,12 @@ const showClientString = R.compose(
 // and then start the client clock at the correct value?
 // makeWootClient :: WString -> ClientId -> WootClient
 const makeWootClient = R.curry((wString, clientId) => {
-  return V.validateOrThrow(wootClientSchema, {
-    clientId: clientId,
+  return {
+    clientId,
     clock: 0,
-    wString: wString,
+    wString,
     operationQueue: []
-  });
+  };
 });
 
 
@@ -72,8 +63,16 @@ const sendOperations = R.reduce(sendOperation);
 // identical to sendOperation, but increments the clients internal clock
 // not exposed - consumers should use sendLocalDelete or sendLocalInsert
 // sendLocalOperation :: WootClient -> Operation -> WootClient
+// TODO: refactor with sendOperations - lots of similar functionality
 const sendLocalOperation = (client, operation) => {
-  return incClock(sendOperation(client, operation));
+  const operations = R.append(operation, client.operationQueue);
+  const result = Core.integrateAllLocal(operations, client.wString);
+
+  return incClock(
+    updateWString(result.wString,
+      updateOperationQueue(result.operations, client)
+    )
+  );
 };
 
 
@@ -124,5 +123,5 @@ export default {
   Operation,
 
   // meta meta
-  __version: '0.0.1'
+  __version: '0.0.2'
 };

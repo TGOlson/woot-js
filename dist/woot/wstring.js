@@ -34,7 +34,10 @@ var insert = _ramda2['default'].insert;
 
 // indexOf :: WCharId -> WString -> Int | null
 var indexOf = function indexOf(id, wString) {
-  var index = _ramda2['default'].findIndex(_ramda2['default'].propEq('id', id), wString);
+  var index = _ramda2['default'].findIndex(function (wChar) {
+    return _wchar2['default'].compareWCharIds(id, wChar.id) === 0;
+  }, wString);
+
   return index === -1 ? null : index;
 };
 
@@ -57,7 +60,20 @@ var subsection = function subsection(idA, idB, wString) {
 
 // nthVisible :: Int -> WString -> WChar | null
 var nthVisible = function nthVisible(i, wString) {
-  return getVisibleChars(wString)[i];
+  var numFound = 0;
+  var j = 0;
+
+  if (i > wString.length) {
+    return null;
+  }
+
+  for (; numFound < i + 1; j++) {
+    if (wString[j].isVisible) {
+      numFound++;
+    }
+  }
+
+  return wString[j - 1];
 };
 
 // hideChar :: WCharId -> WString -> WString

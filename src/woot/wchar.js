@@ -1,31 +1,13 @@
 import R from 'ramda';
-import V from 'o-validator';
-
-
-const wCharIdSchema = {
-  clientId: V.required(R.is(Number)),
-  clock: V.required(R.is(Number))
-};
-
-
-const wCharSchema = {
-  id: V.required(V.validate(wCharIdSchema)),
-  isVisible: V.required(R.is(Boolean)),
-  alpha: V.required(R.is(String)),
-  prevId: V.required(V.validate(wCharIdSchema)),
-  nextId: V.required(V.validate(wCharIdSchema))
-};
 
 
 // makeWCharId :: {k: a} -> WCharId
-const makeWChar = V.validateOrThrow(wCharSchema);
+const makeWChar = R.identity;
 
 
 // makeWCharId :: Int -> Int -> WCharId
 const makeWCharId = (clientId, clock) => {
-  return V.validateOrThrow(wCharIdSchema, {
-    clientId, clock
-  });
+  return {clientId, clock};
 };
 
 
@@ -68,13 +50,17 @@ const hide = R.assoc('isVisible', false);
 
 
 // compareCharIds :: WCharId -> WCharId -> Ordering (-1, 0, 1)
-const compareWCharIds = R.comparator((idA, idB) => {
+const compareWCharIds = (idA, idB) => {
   if (idA.clientId === idB.clientId) {
-    return idA.clock < idB.clock;
+    if (idA.clock === idB.clock) {
+      return 0;
+    }
+
+    return idA.clock < idB.clock ? -1 : 1;
   }
 
-  return idA.clientId < idB.clientId;
-});
+  return idA.clientId < idB.clientId ? -1 : 1;
+};
 
 
 export default {
@@ -83,6 +69,5 @@ export default {
   wCharBeginning,
   wCharEnding,
   hide,
-  compareWCharIds,
-  wCharSchema
+  compareWCharIds
 };

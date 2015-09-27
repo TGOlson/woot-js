@@ -75,6 +75,32 @@ const integrateOp = matchOperationType({
 });
 
 
+// integrateAllWith
+// :: (Operation -> WString -> WString | nul)
+// -> [Operation] -> WString
+// -> WString -> {operations: [Operation], wString: WString}
+const integrateAllWith = R.curry((integrationFn, initialOps, initialWString) => {
+  // no operations have been integrated
+  // and wString has its initial value
+  const initialState = {operations: [], wString: initialWString};
+
+  const integrate_ = ({operations, wString}, op) => {
+    const newString = integrationFn(op, wString);
+    return newString
+      ? {operations, wString: newString}
+      : {operations: R.append(op, operations), wString};
+  };
+
+  const {operations, wString} = R.reduce(integrate_, initialState, initialOps);
+
+  const operationsAreStable = R.length(initialOps) === R.length(operations);
+
+  return operationsAreStable
+    ? {operations, wString}
+    : integrateAllWith(integrationFn, operations, wString);
+});
+
+
 // integrate :: Operation -> WString -> WString | null
 const integrate = (operation, wString) => {
   return canIntegrate(operation, wString) ? integrateOp(operation, wString) : null;
@@ -84,23 +110,17 @@ const integrate = (operation, wString) => {
 // iterate through operation list until stable
 // return any remaining operations, along with new string
 // integrateAll :: [Operation] -> WString -> {operations: [Operation], wString: WString}
-const integrateAll = (initialOps, initialWString) => {
-  // no operations have been integrated
-  // and wString has its initial value
-  const initialState = {operations: [], wString: initialWString};
+const integrateAll = integrateAllWith(integrate);
 
-  const integrate_ = ({operations, wString}, op) => {
-    const newString = integrate(op, wString);
-    return newString
-      ? {operations, wString: newString}
-      : {operations: R.append(op, operations), wString};
-  };
 
-  const {operations, wString} = R.reduce(integrate_, initialState, initialOps);
+// this function acts under the assumption that local operations have already been validated
+// integrateLocal :: Operation -> WString -> WString
+const integrateLocal = integrateOp;
 
-  const operationsAreStable = R.length(initialOps) === R.length(operations);
-  return operationsAreStable ? {operations, wString} : integrateAll(operations, wString);
-};
+
+// this function acts under the assumption that local operations have already been validated
+// integrateAllLocal :: [Operation] -> WString -> WString
+const integrateAllLocal = integrateAllWith(integrateLocal);
 
 
 // makeDeleteOperation :: ClientId -> Int -> WString -> Operation | null
@@ -144,6 +164,8 @@ const makeInsertOperation = (wCharId, position, alpha, wString) => {
 export default {
   integrate,
   integrateAll,
+  integrateLocal,
+  integrateAllLocal,
   makeInsertOperation,
   makeDeleteOperation
 };

@@ -30,7 +30,10 @@ const insert = R.insert;
 
 // indexOf :: WCharId -> WString -> Int | null
 const indexOf = (id, wString) => {
-  const index = R.findIndex(R.propEq('id', id), wString);
+  const index = R.findIndex((wChar) => {
+    return WChar.compareWCharIds(id, wChar.id) === 0;
+  }, wString);
+
   return index === -1 ? null : index;
 };
 
@@ -56,7 +59,20 @@ const subsection = (idA, idB, wString) => {
 
 // nthVisible :: Int -> WString -> WChar | null
 const nthVisible = (i, wString) => {
-  return getVisibleChars(wString)[i];
+  let numFound = 0;
+  let j = 0;
+
+  if (i > wString.length) {
+    return null;
+  }
+
+  for (; numFound < i + 1; j++) {
+    if (wString[j].isVisible) {
+      numFound++;
+    }
+  }
+
+  return wString[j - 1];
 };
 
 

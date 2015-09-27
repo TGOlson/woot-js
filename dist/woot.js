@@ -10,10 +10,6 @@ var _ramda = require('ramda');
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _oValidator = require('o-validator');
-
-var _oValidator2 = _interopRequireDefault(_oValidator);
-
 var _wootCore = require('./woot/core');
 
 var _wootCore2 = _interopRequireDefault(_wootCore);
@@ -30,13 +26,6 @@ var _wootWstring = require('./woot/wstring');
 
 var _wootWstring2 = _interopRequireDefault(_wootWstring);
 
-var wootClientSchema = {
-  clientId: _oValidator2['default'].required(_ramda2['default'].is(Number)),
-  clock: _oValidator2['default'].required(_ramda2['default'].is(Number)),
-  wString: _oValidator2['default'].required(_ramda2['default'].all(_oValidator2['default'].validate(_wootWchar2['default'].wCharSchema))),
-  operationQueue: _oValidator2['default'].required(_ramda2['default'].all(_oValidator2['default'].validate(_wootOperation2['default'].operationSchema)))
-};
-
 // incClock :: WootClient -> WootClient
 var incClock = _ramda2['default'].evolve({ clock: _ramda2['default'].inc });
 
@@ -50,12 +39,12 @@ _wootWstring2['default'].show, _ramda2['default'].prop('wString'));
 // and then start the client clock at the correct value?
 // makeWootClient :: WString -> ClientId -> WootClient
 var makeWootClient = _ramda2['default'].curry(function (wString, clientId) {
-  return _oValidator2['default'].validateOrThrow(wootClientSchema, {
+  return {
     clientId: clientId,
     clock: 0,
     wString: wString,
     operationQueue: []
-  });
+  };
 });
 
 // makeWootClientEmpty :: ClientId -> WootClient
@@ -84,8 +73,12 @@ var sendOperations = _ramda2['default'].reduce(sendOperation);
 // identical to sendOperation, but increments the clients internal clock
 // not exposed - consumers should use sendLocalDelete or sendLocalInsert
 // sendLocalOperation :: WootClient -> Operation -> WootClient
+// TODO: refactor with sendOperations - lots of similar functionality
 var sendLocalOperation = function sendLocalOperation(client, operation) {
-  return incClock(sendOperation(client, operation));
+  var operations = _ramda2['default'].append(operation, client.operationQueue);
+  var result = _wootCore2['default'].integrateAllLocal(operations, client.wString);
+
+  return incClock(updateWString(result.wString, updateOperationQueue(result.operations, client)));
 };
 
 // -- note: failed local operations can result in no-ops if the underlying operation is invalid
@@ -130,7 +123,7 @@ exports['default'] = {
   Operation: _wootOperation2['default'],
 
   // meta meta
-  __version: '0.0.0'
+  __version: '0.0.2'
 };
 module.exports = exports['default'];
 //# sourceMappingURL=woot.js.map

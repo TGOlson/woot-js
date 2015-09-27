@@ -10,31 +10,12 @@ var _ramda = require('ramda');
 
 var _ramda2 = _interopRequireDefault(_ramda);
 
-var _oValidator = require('o-validator');
-
-var _oValidator2 = _interopRequireDefault(_oValidator);
-
-var wCharIdSchema = {
-  clientId: _oValidator2['default'].required(_ramda2['default'].is(Number)),
-  clock: _oValidator2['default'].required(_ramda2['default'].is(Number))
-};
-
-var wCharSchema = {
-  id: _oValidator2['default'].required(_oValidator2['default'].validate(wCharIdSchema)),
-  isVisible: _oValidator2['default'].required(_ramda2['default'].is(Boolean)),
-  alpha: _oValidator2['default'].required(_ramda2['default'].is(String)),
-  prevId: _oValidator2['default'].required(_oValidator2['default'].validate(wCharIdSchema)),
-  nextId: _oValidator2['default'].required(_oValidator2['default'].validate(wCharIdSchema))
-};
-
 // makeWCharId :: {k: a} -> WCharId
-var makeWChar = _oValidator2['default'].validateOrThrow(wCharSchema);
+var makeWChar = _ramda2['default'].identity;
 
 // makeWCharId :: Int -> Int -> WCharId
 var makeWCharId = function makeWCharId(clientId, clock) {
-  return _oValidator2['default'].validateOrThrow(wCharIdSchema, {
-    clientId: clientId, clock: clock
-  });
+  return { clientId: clientId, clock: clock };
 };
 
 // wCharIdBeginning :: WCharId
@@ -71,13 +52,17 @@ var wCharEnding = makeWChar({
 var hide = _ramda2['default'].assoc('isVisible', false);
 
 // compareCharIds :: WCharId -> WCharId -> Ordering (-1, 0, 1)
-var compareWCharIds = _ramda2['default'].comparator(function (idA, idB) {
+var compareWCharIds = function compareWCharIds(idA, idB) {
   if (idA.clientId === idB.clientId) {
-    return idA.clock < idB.clock;
+    if (idA.clock === idB.clock) {
+      return 0;
+    }
+
+    return idA.clock < idB.clock ? -1 : 1;
   }
 
-  return idA.clientId < idB.clientId;
-});
+  return idA.clientId < idB.clientId ? -1 : 1;
+};
 
 exports['default'] = {
   makeWChar: makeWChar,
@@ -85,8 +70,7 @@ exports['default'] = {
   wCharBeginning: wCharBeginning,
   wCharEnding: wCharEnding,
   hide: hide,
-  compareWCharIds: compareWCharIds,
-  wCharSchema: wCharSchema
+  compareWCharIds: compareWCharIds
 };
 module.exports = exports['default'];
 //# sourceMappingURL=../woot/wchar.js.map
