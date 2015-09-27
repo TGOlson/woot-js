@@ -121,5 +121,8 @@ export default {
   // Re-export sub modules
   WString,
   WChar,
-  Operation
+  Operation,
+
+  // meta meta
+  __version: '0.0.0'
 };

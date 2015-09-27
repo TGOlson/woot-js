@@ -127,7 +127,10 @@ exports['default'] = {
   // Utility functions
   showClientString: showClientString, WString: _wootWstring2['default'],
   WChar: _wootWchar2['default'],
-  Operation: _wootOperation2['default']
+  Operation: _wootOperation2['default'],
+
+  // meta meta
+  __version: '0.0.0'
 };
 module.exports = exports['default'];
 //# sourceMappingURL=woot.js.map

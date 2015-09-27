@@ -45,14 +45,15 @@ const integrateInsert = (prevId, nextId, wChar, wString) => {
     return WString.insert(index, wChar, wString);
   }
 
+  const newPrevId = R.head(subsection).id;
+
   // if the current char id is less than the previous id
-  if (WChar.compareWCharIds(wChar.id, prevId) === -1) {
-    const index = WString.indexOf(prevId, wString);
+  if (WChar.compareWCharIds(wChar.id, newPrevId) === -1) {
+    const index = WString.indexOf(newPrevId, wString);
     return WString.insert(index, wChar, wString);
   }
 
   // recurse to integrateInsert with next id in the subsection
-  const newPrevId = R.head(subsection).id;
   return integrateInsert(newPrevId, nextId, wChar, wString);
 };
 

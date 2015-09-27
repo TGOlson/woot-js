@@ -25,6 +25,20 @@ describe('WString', () => {
           {clientId: 0, clock: 10}
         )
       ).toBe(-1);
+
+      expect(
+        WChar.compareWCharIds(
+          {clientId: 0, clock: 0},
+          {clientId: 1, clock: 0}
+        )
+      ).toBe(-1);
+
+      expect(
+        WChar.compareWCharIds(
+          {clientId: 1, clock: 0},
+          {clientId: 0, clock: 0}
+        )
+      ).toBe(1);
     });
   });
 });

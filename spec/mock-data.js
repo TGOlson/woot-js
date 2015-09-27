@@ -103,6 +103,25 @@ const validInsertAfterQueuedInsert = Operation.makeInsertOperation(0, WChar.make
 }));
 
 
+// this insert should get run first
+const ambiguousEmptyStringInsertA = Operation.makeInsertOperation(0, WChar.makeWChar({
+  id: WChar.makeWCharId(1, 0),
+  isVisible: true,
+  alpha: 'W',
+  prevId: WChar.makeWCharId(-1, 0),
+  nextId: WChar.makeWCharId(-1, 1)
+}));
+
+// this insert should get run second, but the wChar should preceed the previous insert
+const ambiguousEmptyStringInsertB = Operation.makeInsertOperation(1, WChar.makeWChar({
+  id: WChar.makeWCharId(0, 0),
+  isVisible: true,
+  alpha: 'X',
+  prevId: WChar.makeWCharId(-1, 0),
+  nextId: WChar.makeWCharId(-1, 1)
+}));
+
+
 export default {
   mockWString,
   validInsertOp,
@@ -111,5 +130,7 @@ export default {
   invalidInsertOp,
   invalidDeleteOp,
   validInsertToValidateDelete,
-  validInsertAfterQueuedInsert
+  validInsertAfterQueuedInsert,
+  ambiguousEmptyStringInsertA,
+  ambiguousEmptyStringInsertB
 };

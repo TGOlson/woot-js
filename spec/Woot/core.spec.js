@@ -5,7 +5,9 @@ import {
   validDeleteOp,
   invalidInsertOp,
   invalidDeleteOp,
-  validInsertToValidateDelete
+  validInsertToValidateDelete,
+  ambiguousEmptyStringInsertA,
+  ambiguousEmptyStringInsertB
 } from '../mock-data';
 
 
@@ -33,6 +35,18 @@ describe('Core', () => {
           Core.integrate(validDeleteOp, mockWString)
         )
       ).toBe('ar');
+    });
+
+    it('should be able to handle ambiguous inserts on empty strings', () => {
+      const wString = WString.makeEmptyWString();
+
+      const wStringB = Core.integrate(ambiguousEmptyStringInsertA, wString);
+
+      expect(
+        WString.show(
+          Core.integrate(ambiguousEmptyStringInsertB, wStringB)
+        )
+      ).toBe('XW');
     });
 
     it('should not integrate an operation if given an invalid op', () => {

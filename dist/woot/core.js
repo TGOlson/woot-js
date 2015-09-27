@@ -63,7 +63,7 @@ var integrateInsert = function integrateInsert(_x, _x2, _x3, _x4) {
         nextId = _x2,
         wChar = _x3,
         wString = _x4;
-    subsection = index = index = newPrevId = undefined;
+    subsection = index = newPrevId = index = undefined;
     _again = false;
 
     if (_wstring2['default'].contains(wChar.id, wString)) {
@@ -71,21 +71,21 @@ var integrateInsert = function integrateInsert(_x, _x2, _x3, _x4) {
     }
 
     var subsection = _wstring2['default'].subsection(prevId, nextId, wString);
-    // console.log(prevId, nextId, subsection);
 
     if (_ramda2['default'].isEmpty(subsection)) {
       var index = _wstring2['default'].indexOf(nextId, wString);
       return _wstring2['default'].insert(index, wChar, wString);
     }
 
+    var newPrevId = _ramda2['default'].head(subsection).id;
+
     // if the current char id is less than the previous id
-    if (_wchar2['default'].compareWCharIds(wChar.id, prevId) === -1) {
-      var index = _wstring2['default'].indexOf(prevId, wString);
+    if (_wchar2['default'].compareWCharIds(wChar.id, newPrevId) === -1) {
+      var index = _wstring2['default'].indexOf(newPrevId, wString);
       return _wstring2['default'].insert(index, wChar, wString);
     }
 
     // recurse to integrateInsert with next id in the subsection
-    var newPrevId = _ramda2['default'].head(subsection).id;
     _x = newPrevId;
     _x2 = nextId;
     _x3 = wChar;
