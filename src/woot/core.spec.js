@@ -8,11 +8,11 @@ import {
   validInsertToValidateDelete,
   ambiguousEmptyStringInsertA,
   ambiguousEmptyStringInsertB
-} from '../mock-data';
+} from '../../spec/mock-data';
 
 
-import Core from '../../dist/woot/core';
-import WString from '../../dist/woot/wstring';
+import Core from './core';
+import WString from './wstring';
 
 
 describe('Core', () => {

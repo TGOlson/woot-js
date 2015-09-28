@@ -1,3 +1,4 @@
+// Import Woot from the index.js file
 import Woot from '../';
 
 import {
@@ -9,7 +10,7 @@ import {
   invalidDeleteOp,
   validInsertToValidateDelete,
   validInsertAfterQueuedInsert
-} from './mock-data';
+} from '../spec/mock-data';
 
 const wootClient = Woot.makeWootClient(mockWString, 0);
 

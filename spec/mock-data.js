@@ -1,5 +1,5 @@
-import Operation from '../dist/woot/operation';
-import WChar from '../dist/woot/wchar';
+import Operation from '../src/woot/operation';
+import WChar from '../src/woot/wchar';
 
 
 const mockWString = [

@@ -4,7 +4,7 @@ import babel from 'gulp-babel';
 import shell from 'gulp-shell';
 
 gulp.task('build', () => {
-  return gulp.src('src/**/*.js')
+  return gulp.src(['src/**/*.js', '!src/**/*.spec.js'])
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(sourcemaps.write('.'))
@@ -16,11 +16,11 @@ gulp.task('test', shell.task('./node_modules/.bin/jasmine', {
 }));
 
 gulp.task('tdd', ['test'], () => {
-  gulp.watch(['spec/**/*.js', 'dist/**/*.js'], ['test']);
+  gulp.watch(['src/**/*.spec.js', 'dist/**/*.js'], ['test']);
 });
 
 gulp.task('watch', () => {
-  gulp.watch(['src/**/*.js'], ['build']);
+  gulp.watch(['src/**/*.js', '!src/**/*.spec.js'], ['build']);
 });
 
 gulp.task('default', ['build', 'watch', 'tdd']);

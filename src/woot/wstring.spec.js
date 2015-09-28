@@ -1,7 +1,7 @@
-import WChar from '../../dist/woot/wchar';
-import WString from '../../dist/woot/wstring';
+import WChar from './wchar';
+import WString from './wstring';
 
-import {mockWString} from '../mock-data';
+import {mockWString} from '../../spec/mock-data';
 
 describe('WString', () => {
   describe('show', () => {
