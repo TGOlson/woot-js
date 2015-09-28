@@ -69,4 +69,4 @@ TODO:
 * ci
 * docs
 * perf tests
-* integrate browser bundle into build `browserify dist/woot.js -o junk/woot.js -s Woot`
+* integrate browser bundle into build `browserify dist/woot.js -o example/woot.js -s Woot`
