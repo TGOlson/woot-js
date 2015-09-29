@@ -2,9 +2,12 @@ import gulp from 'gulp';
 import sourcemaps from 'gulp-sourcemaps';
 import babel from 'gulp-babel';
 import shell from 'gulp-shell';
+import concat from 'gulp-concat';
+
+import Profile from './profile';
 
 gulp.task('build', () => {
-  return gulp.src(['src/**/*.js', '!src/**/*.spec.js'])
+  return gulp.src(['src/**/*.js', '!**/*.spec.js'])
     .pipe(sourcemaps.init())
     .pipe(babel())
     .pipe(sourcemaps.write('.'))
@@ -22,5 +25,8 @@ gulp.task('tdd', ['test'], () => {
 gulp.task('watch', () => {
   gulp.watch(['src/**/*.js', '!src/**/*.spec.js'], ['build']);
 });
+
+gulp.task('profile', Profile.runProfiles);
+gulp.task('profile-with-logs', Profile.runProfilesWithLogs);
 
 gulp.task('default', ['build', 'watch', 'tdd']);

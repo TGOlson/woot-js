@@ -23,9 +23,11 @@
     "eslint-config-airbnb": "0.0.6",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.2.1",
+    "gulp-concat": "^2.6.0",
     "gulp-shell": "^0.4.3",
     "gulp-sourcemaps": "^1.5.2",
-    "jasmine": "^2.3.2"
+    "jasmine": "^2.3.2",
+    "v8-profiler": "^5.3.2"
   },
   "dependencies": {
     "ramda": "^0.17.1"
