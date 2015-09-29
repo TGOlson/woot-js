@@ -1,9 +1,15 @@
-import WChar from './wchar';
-import WString from './wstring';
+import WChar from '../../dist/woot/wchar';
+import WString from '../../dist/woot/wstring';
 
-import {mockWString} from '../../spec/mock-data';
+import {makeMockWString} from '../../spec/mock-data';
 
 describe('WString', () => {
+  let mockWString;
+
+  beforeEach(() => {
+    mockWString = makeMockWString();
+  });
+
   describe('show', () => {
     it('should convert a woot string to a generic string', () => {
       expect(WString.show(mockWString)).toBe('bar');

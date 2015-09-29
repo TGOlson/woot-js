@@ -32,7 +32,7 @@ const makeWootClient = R.curry((wString, clientId) => {
 
 
 // makeWootClientEmpty :: ClientId -> WootClient
-const makeWootClientEmpty = makeWootClient(WString.makeEmptyWString());
+const makeWootClientEmpty = (id) => makeWootClient(WString.makeEmptyWString(), id);
 
 
 // updateOperationQueue :: [Operation] -> WootClient -> WootClient

@@ -1,5 +1,5 @@
 import {
-  mockWString,
+  makeMockWString,
   validInsertOp,
   validInsertOpAmbiguous,
   validDeleteOp,
@@ -11,11 +11,17 @@ import {
 } from '../../spec/mock-data';
 
 
-import Core from './core';
-import WString from './wstring';
+import Core from '../../dist/woot/core';
+import WString from '../../dist/woot/wstring';
 
 
 describe('Core', () => {
+  let mockWString;
+
+  beforeEach(() => {
+    mockWString = makeMockWString();
+  });
+
   describe('integrate', () => {
     it('should integrate an operation into the string if given a valid op', () => {
       expect(

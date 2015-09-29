@@ -26,7 +26,7 @@ gulp.task('watch', () => {
   gulp.watch(['src/**/*.js', '!src/**/*.spec.js'], ['build']);
 });
 
-gulp.task('profile', Profile.runProfiles);
-gulp.task('profile-with-logs', Profile.runProfilesWithLogs);
+gulp.task('profile', ['build'], Profile.runProfiles);
+gulp.task('profile-with-logs', ['build'], Profile.runProfilesWithLogs);
 
 gulp.task('default', ['build', 'watch', 'tdd']);

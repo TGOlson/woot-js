@@ -2,7 +2,7 @@
 import Woot from '../';
 
 import {
-  mockWString,
+  makeMockWString,
   validInsertOp,
   validInsertOpAmbiguous,
   validDeleteOp,
@@ -12,10 +12,17 @@ import {
   validInsertAfterQueuedInsert
 } from '../spec/mock-data';
 
-const wootClient = Woot.makeWootClient(mockWString, 0);
 
 
 describe('Woot', () => {
+  let wootClient;
+  let mockWString;
+
+  beforeEach(() => {
+    mockWString = makeMockWString();
+    wootClient = Woot.makeWootClient(mockWString, 0);
+  });
+
   describe('sendOperation', () => {
     it('should pass an operation to the woot client and return the result', () => {
       const client = Woot.sendOperation(wootClient, validInsertOp);

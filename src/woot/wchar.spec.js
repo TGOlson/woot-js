@@ -1,4 +1,4 @@
-import WChar from './wchar';
+import WChar from '../../dist/woot/wchar';
 
 describe('WString', () => {
   describe('compareWCharIds', () => {

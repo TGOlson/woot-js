@@ -1,37 +1,38 @@
-import Operation from '../src/woot/operation';
-import WChar from '../src/woot/wchar';
-import WString from '../src/woot/wstring';
+import {Operation, WChar, WString} from '../';
 
-const mockWString = WString.makeWStringFromWChars([
-  WChar.makeWChar({
-    id: WChar.makeWCharId(0, 0),
-    isVisible: true,
-    alpha: 'b',
-    prevId: WChar.makeWCharId(-1, 0),
-    nextId: WChar.makeWCharId(0, 1)
-  }),
-  WChar.makeWChar({
-    id: WChar.makeWCharId(0, 1),
-    isVisible: false,
-    alpha: 'x',
-    prevId: WChar.makeWCharId(0, 0),
-    nextId: WChar.makeWCharId(0, 2)
-  }),
-  WChar.makeWChar({
-    id: WChar.makeWCharId(0, 2),
-    isVisible: true,
-    alpha: 'a',
-    prevId: WChar.makeWCharId(0, 1),
-    nextId: WChar.makeWCharId(0, 3)
-  }),
-  WChar.makeWChar({
-    id: WChar.makeWCharId(0, 3),
-    isVisible: true,
-    alpha: 'r',
-    prevId: WChar.makeWCharId(0, 2),
-    nextId: WChar.makeWCharId(-1, 1)
-  })
-]);
+
+const makeMockWString = () => {
+  return WString.makeWStringFromWChars([
+    WChar.makeWChar({
+      id: WChar.makeWCharId(0, 0),
+      isVisible: true,
+      alpha: 'b',
+      prevId: WChar.makeWCharId(-1, 0),
+      nextId: WChar.makeWCharId(0, 1)
+    }),
+    WChar.makeWChar({
+      id: WChar.makeWCharId(0, 1),
+      isVisible: false,
+      alpha: 'x',
+      prevId: WChar.makeWCharId(0, 0),
+      nextId: WChar.makeWCharId(0, 2)
+    }),
+    WChar.makeWChar({
+      id: WChar.makeWCharId(0, 2),
+      isVisible: true,
+      alpha: 'a',
+      prevId: WChar.makeWCharId(0, 1),
+      nextId: WChar.makeWCharId(0, 3)
+    }),
+    WChar.makeWChar({
+      id: WChar.makeWCharId(0, 3),
+      isVisible: true,
+      alpha: 'r',
+      prevId: WChar.makeWCharId(0, 2),
+      nextId: WChar.makeWCharId(-1, 1)
+    })
+  ]);
+};
 
 
 const validInsertOp = Operation.makeInsertOperation(0, WChar.makeWChar({
@@ -121,7 +122,7 @@ const ambiguousEmptyStringInsertB = Operation.makeInsertOperation(1, WChar.makeW
 
 
 export default {
-  mockWString,
+  makeMockWString,
   validInsertOp,
   validInsertOpAmbiguous,
   validDeleteOp,
