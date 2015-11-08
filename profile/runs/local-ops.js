@@ -11,7 +11,7 @@ const profileLocalInserts = (n) => {
         const result = Woot.sendLocalInsert(client, i, 'a');
         client = result.client;
       }, n);
-    }
+    },
   ];
 };
 
@@ -25,7 +25,7 @@ const profileLocalDeletes = (n) => {
         const result = Woot.sendLocalDelete(client, i);
         client = result.client;
       }, n);
-    }
+    },
   ];
 };
 
@@ -34,5 +34,5 @@ export default [
   profileLocalInserts(1000),
   profileLocalInserts(10000),
   profileLocalDeletes(1000),
-  profileLocalDeletes(10000)
+  profileLocalDeletes(10000),
 ];

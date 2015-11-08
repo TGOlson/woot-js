@@ -1,5 +1,5 @@
 // Import Woot from the index.js file
-import Woot from '../';
+import Woot from './woot';
 
 import {
   mockWString,

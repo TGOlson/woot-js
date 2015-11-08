@@ -2,7 +2,7 @@ import fs from 'fs';
 import profiler from 'v8-profiler';
 
 
-const profile = (label, fn) => {
+export const profile = (label, fn) => {
   /*eslint-disable */
   console.time(label);
   /*eslint-enable */
@@ -15,7 +15,7 @@ const profile = (label, fn) => {
 };
 
 
-const profileWithLogs = (label, fn) => {
+export const profileWithLogs = (label, fn) => {
   profiler.startProfiling(label, true);
 
   fn();
@@ -27,10 +27,4 @@ const profileWithLogs = (label, fn) => {
     fs.writeFileSync('./profile/logs/' + file + '.cpuprofile', result);
     prof.delete();
   });
-};
-
-
-export default {
-  profile,
-  profileWithLogs
 };
