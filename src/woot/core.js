@@ -1,9 +1,9 @@
 import R from 'ramda';
 
 
-import Operation from './operation';
-import WChar from './wchar';
-import WString from './wstring';
+import * as Operation from './operation';
+import * as WChar from './wchar';
+import * as WString from './wstring';
 
 
 // matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
@@ -28,7 +28,7 @@ const canIntegrate = matchOperationType({
   },
   'delete': ({wChar}, wString) => {
     return WString.contains(wChar.id, wString);
-  }
+  },
 });
 
 
@@ -71,7 +71,7 @@ const integrateOp = matchOperationType({
   },
   'delete': ({wChar}, wString) => {
     return integrateDelete(wChar, wString);
-  }
+  },
 });
 
 
@@ -102,7 +102,7 @@ const integrateAllWith = R.curry((integrationFn, initialOps, initialWString) => 
 
 
 // integrate :: Operation -> WString -> WString | null
-const integrate = (operation, wString) => {
+export const integrate = (operation, wString) => {
   return canIntegrate(operation, wString) ? integrateOp(operation, wString) : null;
 };
 
@@ -110,21 +110,21 @@ const integrate = (operation, wString) => {
 // iterate through operation list until stable
 // return any remaining operations, along with new string
 // integrateAll :: [Operation] -> WString -> {operations: [Operation], wString: WString}
-const integrateAll = integrateAllWith(integrate);
+export const integrateAll = integrateAllWith(integrate);
 
 
 // this function acts under the assumption that local operations have already been validated
 // integrateLocal :: Operation -> WString -> WString
-const integrateLocal = integrateOp;
+export const integrateLocal = integrateOp;
 
 
 // this function acts under the assumption that local operations have already been validated
 // integrateAllLocal :: [Operation] -> WString -> WString
-const integrateAllLocal = integrateAllWith(integrateLocal);
+export const integrateAllLocal = integrateAllWith(integrateLocal);
 
 
 // makeDeleteOperation :: ClientId -> Int -> WString -> Operation | null
-const makeDeleteOperation = (clientId, position, wString) => {
+export const makeDeleteOperation = (clientId, position, wString) => {
   const wChar = WString.nthVisible(position, wString);
 
   return wChar ? Operation.makeDeleteOperation(clientId, wChar) : null;
@@ -134,7 +134,7 @@ const makeDeleteOperation = (clientId, position, wString) => {
 // position based of off visible characters only
 // operations should only be concerned with the visible string
 // makeInsertOperation :: WCharId -> Int -> Char -> WString -> Operation | null
-const makeInsertOperation = (wCharId, position, alpha, wString) => {
+export const makeInsertOperation = (wCharId, position, alpha, wString) => {
   const numVisible = WString.show(wString).length;
 
   const prev = position === 0
@@ -151,21 +151,11 @@ const makeInsertOperation = (wCharId, position, alpha, wString) => {
       isVisible: true,
       alpha,
       prevId: prev.id,
-      nextId: next.id
+      nextId: next.id,
     });
 
     return Operation.makeInsertOperation(wCharId.clientId, wChar);
   }
 
   return null;
-};
-
-
-export default {
-  integrate,
-  integrateAll,
-  integrateLocal,
-  integrateAllLocal,
-  makeInsertOperation,
-  makeDeleteOperation
 };

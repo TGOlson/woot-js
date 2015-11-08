@@ -1,10 +1,10 @@
 import R from 'ramda';
 
 
-import Core from './woot/core';
-import Operation from './woot/operation';
-import WChar from './woot/wchar';
-import WString from './woot/wstring';
+import * as Core from './woot/core';
+import * as Operation from './woot/operation';
+import * as WChar from './woot/wchar';
+import * as WString from './woot/wstring';
 
 
 // incClock :: WootClient -> WootClient
@@ -26,7 +26,7 @@ const makeWootClient = R.curry((wString, clientId) => {
     clientId,
     clock: 0,
     wString,
-    operationQueue: []
+    operationQueue: [],
   };
 });
 
@@ -86,7 +86,7 @@ const sendLocalDelete = (client, position) => {
 
   return {
     operation: maybeOp,
-    client: maybeOp ? sendLocalOperation(client, maybeOp) : client
+    client: maybeOp ? sendLocalOperation(client, maybeOp) : client,
   };
 };
 
@@ -98,7 +98,7 @@ const sendLocalInsert = (client, position, alpha) => {
 
   return {
     operation: maybeOp,
-    client: maybeOp ? sendLocalOperation(client, maybeOp) : client
+    client: maybeOp ? sendLocalOperation(client, maybeOp) : client,
   };
 };
 
@@ -123,5 +123,5 @@ export default {
   Operation,
 
   // meta meta
-  __version: '0.0.5'
+  __version: '0.0.5',
 };

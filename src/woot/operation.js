@@ -10,11 +10,5 @@ const makeOperation = R.curry((type, clientId, wChar) => {
 });
 
 
-const makeInsertOperation = makeOperation(INSERT_OP_TYPE);
-const makeDeleteOperation = makeOperation(DELETE_OP_TYPE);
-
-
-export default {
-  makeInsertOperation,
-  makeDeleteOperation
-};
+export const makeInsertOperation = makeOperation(INSERT_OP_TYPE);
+export const makeDeleteOperation = makeOperation(DELETE_OP_TYPE);

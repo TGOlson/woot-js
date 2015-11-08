@@ -9,7 +9,7 @@ import {
   invalidInsertOp,
   invalidDeleteOp,
   validInsertToValidateDelete,
-  validInsertAfterQueuedInsert
+  validInsertAfterQueuedInsert,
 } from '../spec/mock-data';
 
 const wootClient = Woot.makeWootClient(mockWString, 0);
@@ -23,11 +23,11 @@ describe('Woot', () => {
     });
 
     it('should queue failed operations to try later', () => {
-      let clientA = Woot.sendOperation(wootClient, invalidDeleteOp);
+      const clientA = Woot.sendOperation(wootClient, invalidDeleteOp);
       expect(clientA.operationQueue.length).toBe(1);
       expect(Woot.showClientString(clientA)).toBe('bar');
 
-      let clientB = Woot.sendOperation(clientA, validInsertToValidateDelete);
+      const clientB = Woot.sendOperation(clientA, validInsertToValidateDelete);
       expect(clientB.operationQueue.length).toBe(0);
 
       // would be "bMar" if original delete didnt go
@@ -47,10 +47,10 @@ describe('Woot', () => {
         // will become valid after validInsertToValidateDelete
         invalidDeleteOp,
         // will make invalid delete operation valid
-        validInsertToValidateDelete
+        validInsertToValidateDelete,
       ];
 
-      let client = Woot.sendOperations(wootClient, ops);
+      const client = Woot.sendOperations(wootClient, ops);
       expect(Woot.showClientString(client)).toBe('Waq#r');
     });
   });

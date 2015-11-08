@@ -7,12 +7,12 @@ import {
   invalidDeleteOp,
   validInsertToValidateDelete,
   ambiguousEmptyStringInsertA,
-  ambiguousEmptyStringInsertB
+  ambiguousEmptyStringInsertB,
 } from '../../spec/mock-data';
 
 
-import Core from './core';
-import WString from './wstring';
+import * as Core from './core';
+import * as WString from './wstring';
 
 
 describe('Core', () => {

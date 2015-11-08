@@ -1,5 +1,5 @@
-import WChar from './wchar';
-import WString from './wstring';
+import * as WChar from './wchar';
+import * as WString from './wstring';
 
 import {mockWString} from '../../spec/mock-data';
 
@@ -17,7 +17,7 @@ describe('WString', () => {
         isVisible: true,
         alpha: 'P',
         prevId: {clientId: 0, clock: 1},
-        nextId: {clientId: 0, clock: 2}
+        nextId: {clientId: 0, clock: 2},
       });
 
       const newString = WString.insert(4, newChar, mockWString);

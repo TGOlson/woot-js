@@ -1,4 +1,4 @@
-import WChar from './wchar';
+import * as WChar from './wchar';
 
 describe('WString', () => {
   describe('compareWCharIds', () => {
