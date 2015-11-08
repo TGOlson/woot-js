@@ -1,5 +1,8 @@
 {
   "extends": "eslint-config-airbnb",
+  "rules": {
+    "id-length": [2, {"min": 1}]
+  },
   "env": {
     "browser": false,
     "node": true,

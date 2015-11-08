@@ -1,0 +1,17 @@
+[ignore]
+.*/node_modules/.*
+.*/dist/.*
+.*/spec/.*
+.*/src/.*
+.*/profile/.*
+.*/example/.*
+.*index*
+.*gulpfile*
+
+[include]
+.*/src/.*
+
+[libs]
+./libs
+
+[options]
