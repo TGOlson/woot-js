@@ -45,12 +45,12 @@ gulp.task('typecheck', (cb) => {
   ls.on('close', () => cb());
 });
 
-gulp.task('test', shell.task('./node_modules/.bin/jasmine', {
+gulp.task('test', ['build'], shell.task('./node_modules/.bin/jasmine', {
   ignoreErrors: true,
 }));
 
 gulp.task('tdd', ['test'], () => {
-  gulp.watch(['src/**/*.spec.js', 'dist/**/*.js'], ['test']);
+  gulp.watch(['src/**/*.spec.js', 'spec/**/*.spec.js', 'dist/**/*.js'], ['test']);
 });
 
 gulp.task('watch', () => {

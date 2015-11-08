@@ -12,7 +12,7 @@ const incClock = R.evolve({clock: R.inc});
 
 
 // showClientString :: WootClient -> String
-const showClientString = R.compose(
+export const showClientString = R.compose(
   WString.show,
   R.prop('wString')
 );
@@ -21,7 +21,7 @@ const showClientString = R.compose(
 // TODO: should this check if the client id already exists in the provided string
 // and then start the client clock at the correct value?
 // makeWootClient :: WString -> ClientId -> WootClient
-const makeWootClient = R.curry((wString, clientId) => {
+export const makeWootClient = R.curry((wString, clientId) => {
   return {
     clientId,
     clock: 0,
@@ -32,7 +32,7 @@ const makeWootClient = R.curry((wString, clientId) => {
 
 
 // makeWootClientEmpty :: ClientId -> WootClient
-const makeWootClientEmpty = makeWootClient(WString.makeEmptyWString());
+export const makeWootClientEmpty = makeWootClient(WString.makeEmptyWString());
 
 
 // updateOperationQueue :: [Operation] -> WootClient -> WootClient
@@ -46,7 +46,7 @@ const updateWString = R.assoc('wString');
 // the operation will either be integrated into the woot client's string
 // or it will be added to the client's interal operation queue to be tried again
 // sendOperation :: WootClient -> Operation -> WootClient
-const sendOperation = (client, operation) => {
+export const sendOperation = (client, operation) => {
   const operations = R.append(operation, client.operationQueue);
   const result = Core.integrateAll(operations, client.wString);
 
@@ -57,7 +57,7 @@ const sendOperation = (client, operation) => {
 
 
 // sendOperations :: WootClient -> [Operation] -> WootClient
-const sendOperations = R.reduce(sendOperation);
+export const sendOperations = R.reduce(sendOperation);
 
 
 // identical to sendOperation, but increments the clients internal clock
@@ -81,7 +81,7 @@ const sendLocalOperation = (client, operation) => {
 // -- the assumption is that anything done locally should already be verified
 // -- if the local operation was successful, the operation should be broadcasted to other clients
 // sendLocalDelete :: WootClient -> Int -> {operation: Operation | null, client: WootClient}
-const sendLocalDelete = (client, position) => {
+export const sendLocalDelete = (client, position) => {
   const maybeOp = Core.makeDeleteOperation(client.clientId, position, client.wString);
 
   return {
@@ -92,7 +92,7 @@ const sendLocalDelete = (client, position) => {
 
 
 // sendLocalInsert :: WootClient -> Int -> Char -> {operation: Operation | null, client: WootClient}
-const sendLocalInsert = (client, position, alpha) => {
+export const sendLocalInsert = (client, position, alpha) => {
   const wCharId = WChar.makeWCharId(client.clientId, client.clock);
   const maybeOp = Core.makeInsertOperation(wCharId, position, alpha, client.wString);
 
@@ -102,6 +102,13 @@ const sendLocalInsert = (client, position, alpha) => {
   };
 };
 
+export {
+  WString,
+  WChar,
+  Operation,
+};
+
+export const __version = '0.0.5';
 
 export default {
   // Construction
