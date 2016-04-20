@@ -1,24 +1,21 @@
-import R from 'ramda';
+import type { WChar } from './wchar';
 
-import type {WChar} from './wchar';
-
-const INSERT_OP_TYPE = 'insert';
-const DELETE_OP_TYPE = 'delete';
+export type OperationType = 'INSERT' | 'DELETE';
 
 export type Operation = {
-  type: string,
+  type: OperationType,
   clientId: number,
   wChar: WChar,
 }
 
-const makeOperation: (_:string) => (_:number) => (_:WChar) => Operation
-= R.curry((type, clientId, wChar) => {
-  return {type, clientId, wChar};
+export const makeInsertOperation = (clientId: number, wChar: WChar): Operation => ({
+  type: 'INSERT',
+  clientId,
+  wChar,
 });
 
-
-export const makeInsertOperation: (_:number) => (_:WChar) => Operation
-= makeOperation(INSERT_OP_TYPE);
-
-export const makeDeleteOperation: (_:number) => (_:WChar) => Operation
-= makeOperation(DELETE_OP_TYPE);
+export const makeDeleteOperation = (clientId: number, wChar: WChar): Operation => ({
+  type: 'DELETE',
+  clientId,
+  wChar,
+});

@@ -2,16 +2,12 @@ import R from 'ramda';
 
 import * as WChar from './wchar';
 
+export type WString = Array<WChar.WChar>;
 
-const isDefined = R.complement(R.isNil);
-
-
-// makeEmptyWString :: WString
-export const makeEmptyWString = () => [WChar.wCharBeginning, WChar.wCharEnding];
+export const makeEmptyWString = (): WString => [WChar.wCharBeginning, WChar.wCharEnding];
 
 
-// show :: WString -> String
-export const show = (wString) => {
+export const show = (wString: WString): string => {
   let i = 0;
   let str = '';
 
@@ -31,8 +27,7 @@ export const show = (wString) => {
 export const insert = R.insert;
 
 
-// indexOf :: WCharId -> WString -> Int | null
-export const indexOf = (id, wString) => {
+export const indexOf = (id: WChar.WCharId, wString: WString): ?number => {
   const index = R.findIndex((wChar) => {
     return WChar.compareWCharIds(id, wChar.id) === 0;
   }, wString);
@@ -41,18 +36,16 @@ export const indexOf = (id, wString) => {
 };
 
 
-// contains :: WCharId -> WString -> Bool
-export const contains = (id, wString) => {
+export const contains = (id: WChar.WCharId, wString: WString): boolean => {
   return indexOf(id, wString) !== null;
 };
 
 
-// subsection :: WCharId -> WCharId -> WString -> WString
-export const subsection = (idA, idB, wString) => {
+export const subsection = (idA: WChar.WCharId, idB: WChar.WCharId, wString: WString): WString => {
   const indexA = indexOf(idA, wString);
   const indexB = indexOf(idB, wString);
 
-  if (isDefined(indexA) && isDefined(indexB) && (indexA < indexB)) {
+  if (indexA && indexB && (indexA < indexB)) {
     return R.slice(indexA + 1, indexB, wString);
   }
 
@@ -60,8 +53,7 @@ export const subsection = (idA, idB, wString) => {
 };
 
 
-// nthVisible :: Int -> WString -> WChar | null
-export const nthVisible = (i, wString) => {
+export const nthVisible = (i: number, wString: WString): ?WChar.WChar => {
   let numFound = 0;
   let j = 0;
 
@@ -83,10 +75,8 @@ export const nthVisible = (i, wString) => {
 };
 
 
-// hideChar :: WCharId -> WString -> WString
-export const hideChar = (id, wString) => {
+export const hideChar = (id: WChar.WCharId, wString: WString): WString => {
   const index = indexOf(id, wString);
-  const wChar = WChar.hide(wString[index]);
 
-  return index ? R.update(index, wChar, wString) : wString;
+  return index ? R.update(index, WChar.hide(wString[index]), wString) : wString;
 };

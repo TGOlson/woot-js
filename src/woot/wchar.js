@@ -1,10 +1,10 @@
 import R from 'ramda';
 
-import type {Ordering} from '../types/ordering';
+import type { Ordering } from '../types/ordering';
 
 export type WCharId = {
-  clientId: number,
-  clock: number,
+  clientId: number;
+  clock: number;
 };
 
 
@@ -12,7 +12,7 @@ export type WChar = {
   id: WCharId,
   isVisible: boolean,
   alpha: string,
-  prevId: WCharId,
+  nextId: WCharId,
   prevId: WCharId,
 };
 
@@ -21,10 +21,7 @@ export const makeWChar: (_:Object) => WChar
 = R.identity;
 
 
-export const makeWCharId: (_:number, _:number) => WCharId
-= (clientId, clock) => {
-  return {clientId, clock};
-};
+export const makeWCharId = (clientId: number, clock :number): WCharId => ({ clientId, clock });
 
 
 const wCharIdBeginning: WCharId = makeWCharId(-1, 0);
@@ -60,8 +57,7 @@ export const hide: (_:WChar) => WChar
 
 
 // compareCharIds :: WCharId -> WCharId -> Ordering (-1, 0, 1)
-export const compareWCharIds: (_:WCharId, _:WCharId) => Ordering
-= (idA, idB) => {
+export const compareWCharIds = (idA: WCharId, idB: WCharId): Ordering => {
   if (idA.clientId === idB.clientId) {
     if (idA.clock === idB.clock) {
       return 0;

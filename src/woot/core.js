@@ -5,47 +5,45 @@ import * as Operation from './operation';
 import * as WChar from './wchar';
 import * as WString from './wstring';
 
+type ClientId = number;
 
-// matchOperationType :: {OperationType: *} -> (Operation -> * | Error)
-const matchOperationType = (dict) => {
-  return (...args) => {
-    const type = R.path(['0', 'type'], args);
-    if (R.has(type, dict)) {
-      return R.prop(type, dict).apply(null, args);
+
+const canIntegrate = (operation: Operation.Operation, wString: WString.WString): boolean => {
+  const { type, wChar } = operation;
+  switch (type) {
+    case 'INSERT': {
+      const containsPrev = WString.contains(wChar.prevId, wString);
+      const containsNext = WString.contains(wChar.nextId, wString);
+      return containsPrev && containsNext;
     }
 
-    throw new Error('Invalid operation type: ' + type);
-  };
+    case 'DELETE': {
+      return WString.contains(wChar.id, wString);
+    }
+
+    default: throw new Error(`Invalid operation type: ${type}`);
+  }
 };
 
 
-// canIntegrate :: Operation -> WString -> Bool
-const canIntegrate = matchOperationType({
-  insert: ({wChar}, wString) => {
-    const containsPrev = WString.contains(wChar.prevId, wString);
-    const containsNext = WString.contains(wChar.nextId, wString);
-    return containsPrev && containsNext;
-  },
-  'delete': ({wChar}, wString) => {
-    return WString.contains(wChar.id, wString);
-  },
-});
-
-
-// integrateInsert :: WCharId -> WCharId -> WChar -> WString -> WString
-const integrateInsert = (prevId, nextId, wChar, wString) => {
+const integrateInsert = (
+  prevId: WChar.WCharId,
+  nextId: WChar.WCharId,
+  wChar: WChar.WChar,
+  wString: WString.WString
+): WString.WString => {
   if (WString.contains(wChar.id, wString)) {
     return wString;
   }
 
   const subsection = WString.subsection(prevId, nextId, wString);
 
-  if (R.isEmpty(subsection)) {
+  if (subsection.length === 0) {
     const index = WString.indexOf(nextId, wString);
     return WString.insert(index, wChar, wString);
   }
 
-  const newPrevId = R.head(subsection).id;
+  const newPrevId = subsection[0].id;
 
   // if the current char id is less than the previous id
   if (WChar.compareWCharIds(wChar.id, newPrevId) === -1) {
@@ -58,59 +56,67 @@ const integrateInsert = (prevId, nextId, wChar, wString) => {
 };
 
 
-// integrateDelete :: WChar -> WString -> WString
-const integrateDelete = ({id}, wString) => {
-  return WString.hideChar(id, wString);
+const integrateDelete = (wChar: WChar.WChar, wString: WString.WString) => {
+  return WString.hideChar(wChar.id, wString);
+};
+
+const integrateOp = (operation: Operation.Operation, wString: WString.WString): WString.WString => {
+  const { type, wChar } = operation;
+  switch (type) {
+    case 'INSERT': {
+      return integrateInsert(wChar.prevId, wChar.nextId, wChar, wString);
+    }
+
+    case 'DELETE': {
+      return integrateDelete(wChar, wString);
+    }
+
+    default: throw new Error(`Invalid operation type: ${type}`);
+  }
 };
 
 
-// integrateOp :: Operation -> WString -> WString
-const integrateOp = matchOperationType({
-  insert: ({wChar}, wString) => {
-    return integrateInsert(wChar.prevId, wChar.nextId, wChar, wString);
-  },
-  'delete': ({wChar}, wString) => {
-    return integrateDelete(wChar, wString);
-  },
-});
-
-
-// integrateAllWith
-// :: (Operation -> WString -> WString | nul)
-// -> [Operation] -> WString
-// -> WString -> {operations: [Operation], wString: WString}
-const integrateAllWith = R.curry((integrationFn, initialOps, initialWString) => {
+const integrateAllWith = (
+  integrationFn: (_: Operation.Operation, _: WString.WString) => ?WString.WString,
+  initialOps: Array<Operation.Operation>,
+  initialWString: WString.WString
+): {operations: Array<Operation.Operation>, wString: WString.WString} => {
   // no operations have been integrated
   // and wString has its initial value
-  const initialState = {operations: [], wString: initialWString};
+  const initialState = { operations: [], wString: initialWString };
 
-  const integrate_ = ({operations, wString}, op) => {
+  const integrate_ = ({ operations, wString }, op) => {
     const newString = integrationFn(op, wString);
     return newString
-      ? {operations, wString: newString}
-      : {operations: R.append(op, operations), wString};
+      ? { operations, wString: newString }
+      : { operations: R.append(op, operations), wString };
   };
 
-  const {operations, wString} = R.reduce(integrate_, initialState, initialOps);
+  const { operations, wString } = R.reduce(integrate_, initialState, initialOps);
 
   const operationsAreStable = R.length(initialOps) === R.length(operations);
 
   return operationsAreStable
-    ? {operations, wString}
+    ? { operations, wString }
     : integrateAllWith(integrationFn, operations, wString);
-});
+};
 
 
-// integrate :: Operation -> WString -> WString | null
-export const integrate = (operation, wString) => {
+export const integrate = (
+  operation: Operation.Operation,
+  wString: WString.WString
+): ?WString.WString => {
   return canIntegrate(operation, wString) ? integrateOp(operation, wString) : null;
 };
 
 
 // iterate through operation list until stable
 // return any remaining operations, along with new string
-// integrateAll :: [Operation] -> WString -> {operations: [Operation], wString: WString}
-export const integrateAll = integrateAllWith(integrate);
+export const integrateAll = (
+  operations: Array<Operation.Operation>,
+  wString: WString.WString
+): {operations: Array<Operation.Operation>, wString: WString.WString} =>
+  integrateAllWith(integrate, operations, wString);
 
 
 // this function acts under the assumption that local operations have already been validated
@@ -119,12 +125,18 @@ export const integrateLocal = integrateOp;
 
 
 // this function acts under the assumption that local operations have already been validated
-// integrateAllLocal :: [Operation] -> WString -> WString
-export const integrateAllLocal = integrateAllWith(integrateLocal);
+export const integrateAllLocal = (
+  operations: Array<Operation.Operation>,
+  wString: WString.WString
+): {operations: Array<Operation.Operation>, wString: WString.WString} =>
+  integrateAllWith(integrateLocal, operations, wString);
 
 
-// makeDeleteOperation :: ClientId -> Int -> WString -> Operation | null
-export const makeDeleteOperation = (clientId, position, wString) => {
+export const makeDeleteOperation = (
+  clientId: ClientId,
+  position: number,
+  wString: WString.WString
+): ?Operation.Operation => {
   const wChar = WString.nthVisible(position, wString);
 
   return wChar ? Operation.makeDeleteOperation(clientId, wChar) : null;
@@ -133,8 +145,12 @@ export const makeDeleteOperation = (clientId, position, wString) => {
 
 // position based of off visible characters only
 // operations should only be concerned with the visible string
-// makeInsertOperation :: WCharId -> Int -> Char -> WString -> Operation | null
-export const makeInsertOperation = (wCharId, position, alpha, wString) => {
+export const makeInsertOperation = (
+  wCharId: WChar.WCharId
+  , position: number
+  , alpha: string
+  , wString: WString.WString
+): ?Operation.Operation => {
   const numVisible = WString.show(wString).length;
 
   const prev = position === 0

@@ -1,11 +1,21 @@
 {
   "extends": "eslint-config-airbnb",
-  "rules": {
-    "id-length": [2, {"min": 1}]
-  },
+  "parser": "babel-eslint",
+  "plugins": ["flow-vars"],
   "env": {
     "browser": false,
     "node": true,
-    "jasmine": true
+    "mocha": true
+  },
+  "rules": {
+    "flow-vars/define-flow-type": 2,
+    "flow-vars/use-flow-type": 2,
+    "no-console": 2,
+    "no-unused-vars": [2, {
+      "vars": "all",
+      "varsIgnorePattern": "^_",
+      "args": "all",
+      "argsIgnorePattern": "^_"
+    }]
   }
 }

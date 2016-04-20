@@ -27,7 +27,7 @@ gulp.task('build', (cb) => {
     .transform(babelify, babelOpts)
     .bundle()
     .on('error', (err) => {
-      logBundleError.log(err);
+      logBundleError(err);
       cb();
     })
     .pipe(source('woot.js'))
