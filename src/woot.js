@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-// import Package from '../package.json';
+import Package from '../package.json';
 
 import * as Core from './woot/core';
 import * as Operation from './woot/operation';
@@ -120,8 +120,7 @@ export {
   Operation,
 };
 
-// TODO: get from package.json
-export const __version = '0.0.5';
+export const __version = Package.version;
 
 // TODO: no default export
 export default {
@@ -144,5 +143,5 @@ export default {
   Operation,
 
   // meta meta
-  __version: '0.0.5',
+  __version: Package.version,
 };
