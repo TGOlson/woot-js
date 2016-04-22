@@ -22,7 +22,7 @@ export const profileWithLogs = (label, fn) => {
 
   const prof = profiler.stopProfiling(label);
 
-  prof.export((error, result) => {
+  prof.export((_error, result) => {
     const file = label.toLowerCase().replace(/ /g, '-') + new Date().getTime();
     fs.writeFileSync('./profile/logs/' + file + '.cpuprofile', result);
     prof.delete();

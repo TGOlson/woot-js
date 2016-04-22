@@ -1,5 +1,5 @@
 import R from 'ramda';
-import Woot from '../../';
+import * as Woot from '../../dist/woot';
 
 const profileLocalInserts = (n) => {
   return [
@@ -15,6 +15,8 @@ const profileLocalInserts = (n) => {
   ];
 };
 
+// TODO: this isn't actually a good profile
+// All delete attempts no-op since it is an empty wString.
 const profileLocalDeletes = (n) => {
   return [
     `Sending ${n} local deletes`,

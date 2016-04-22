@@ -22,7 +22,7 @@ gulp.task('build', (cb) => {
 
   return browserify('src/woot.js', {
     debug: true,
-    standalone: 'woot-js',
+    standalone: 'Woot',
   })
     .transform(babelify, babelOpts)
     .bundle()

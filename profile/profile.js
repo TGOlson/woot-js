@@ -1,6 +1,6 @@
-import {profile, profileWithLogs} from './profiler';
+import { profile, profileWithLogs } from './profiler';
 
-import {forEach} from 'ramda';
+import { forEach } from 'ramda';
 
 // Runs need to be lazily loaded to build-time dependencies on /dist
 const runs = () => {
