@@ -13,6 +13,7 @@ declare module ramda {
   declare function chain<A, B>(_:(_:A) => Array<B>, _:Array<A>): Array<B>;
 
   // TODO:
+  declare var all: any;
   declare var insert: any;
   declare var complement: any;
   declare var curry: any;

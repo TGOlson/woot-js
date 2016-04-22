@@ -54,7 +54,7 @@ gulp.task('tdd', ['test'], () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(['src/**/*.js', '!src/**/*.spec.js'], ['typecheck', 'build']);
+  gulp.watch(['src/**/*.js', 'spec/**/*.js'], ['typecheck', 'build']);
 });
 
 gulp.task('profile', Profile.runProfiles);

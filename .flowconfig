@@ -1,7 +1,7 @@
 [ignore]
 .*/node_modules
 .*/dist
-.*/spec
+.*/spec/.*spec.*
 .*/src/.*spec.*
 .*/profile
 .*/example

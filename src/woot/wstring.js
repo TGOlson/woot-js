@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-import type { Optional } from '../types';
+import type { Optional } from './types';
 import type { WChar, WCharId } from './wchar';
 
 import {

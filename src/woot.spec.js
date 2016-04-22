@@ -1,5 +1,4 @@
-// Import Woot from the index.js file
-import Woot from './woot';
+import * as Woot from './woot';
 
 import {
   mockWString,
@@ -57,40 +56,40 @@ describe('Woot', () => {
 
   describe('sendLocalInsert', () => {
     it('should insert a new character', () => {
-      const {client} = Woot.sendLocalInsert(Woot.makeWootClientEmpty(0), 0, 'T');
+      const { client } = Woot.sendLocalInsert(Woot.makeWootClientEmpty(0), 0, 'T');
       const result = Woot.sendLocalInsert(client, 1, 'y');
       expect(Woot.showClientString(result.client)).toBe('Ty');
     });
 
     it('should increment the client clock', () => {
-      const {client} = Woot.sendLocalInsert(Woot.makeWootClientEmpty(0), 0, 'T');
+      const { client } = Woot.sendLocalInsert(Woot.makeWootClientEmpty(0), 0, 'T');
       const result = Woot.sendLocalInsert(client, 1, 'y');
       expect(result.client.clock).toBe(2);
     });
 
     it('should return the original client when passed an invalid position', () => {
-      const {client} = Woot.sendLocalInsert(wootClient, 100, 'x');
+      const { client } = Woot.sendLocalInsert(wootClient, 100, 'x');
       expect(client).toEqual(wootClient);
     });
   });
 
   describe('sendLocalDelete', () => {
     it('should delete a character', () => {
-      const {client} = Woot.sendLocalDelete(wootClient, 2);
+      const { client } = Woot.sendLocalDelete(wootClient, 2);
       const result = Woot.sendLocalDelete(client, 1);
 
       expect(Woot.showClientString(result.client)).toBe('b');
     });
 
     it('should increment the client clock', () => {
-      const {client} = Woot.sendLocalDelete(wootClient, 2);
+      const { client } = Woot.sendLocalDelete(wootClient, 2);
       const result = Woot.sendLocalDelete(client, 1);
 
       expect(result.client.clock).toBe(2);
     });
 
     it('should return the original client when passed an invalid position', () => {
-      const {client} = Woot.sendLocalDelete(wootClient, 100);
+      const { client } = Woot.sendLocalDelete(wootClient, 100);
       expect(client).toEqual(wootClient);
     });
   });

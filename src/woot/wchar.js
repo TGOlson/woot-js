@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-import type { Ordering } from '../types';
+import type { Ordering } from './types';
 
 export type WCharId = {
   clientId: number;
@@ -16,16 +16,9 @@ export type WChar = {
   prevId: WCharId,
 };
 
-// TODO: remove 'make<X> functions' once everything is typed
-export const makeWChar: (_:Object) => WChar
-= R.identity;
 
-
-export const makeWCharId = (clientId: number, clock :number): WCharId => ({ clientId, clock });
-
-
-const wCharIdBeginning: WCharId = makeWCharId(-1, 0);
-const wCharIdEnding: WCharId = makeWCharId(-1, 1);
+const wCharIdBeginning: WCharId = { clientId: -1, clock: 0 };
+const wCharIdEnding: WCharId = { clientId: -1, clock: 1 };
 
 
 // -- special character to mark the beginning of a wString
