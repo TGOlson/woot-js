@@ -81,20 +81,26 @@ describe('Core', () => {
   });
   describe('integrateAll', () => {
     it('should integrate a list of valid operations', () => {
-      const {operations, wString} = Core.integrateAll([validInsertOp, validDeleteOp], mockWString);
+      const { operations, wString } = Core.integrateAll(
+        [validInsertOp, validDeleteOp], mockWString
+      );
+
       expect(operations).toEqual([]);
       expect(WString.show(wString)).toBe('aqr');
     });
 
     it('should return any invalid operations', () => {
-      const {operations, wString} = Core.integrateAll([invalidInsertOp, invalidDeleteOp], mockWString);
+      const { operations, wString } = Core.integrateAll(
+        [invalidInsertOp, invalidDeleteOp], mockWString
+      );
+
       expect(operations).toEqual([invalidInsertOp, invalidDeleteOp]);
       expect(WString.show(wString)).toBe('bar');
     });
 
     it('should recurse if an operation is made valid by a later operation', () => {
       const ops = [invalidInsertOp, invalidDeleteOp, validInsertToValidateDelete];
-      const {operations, wString} = Core.integrateAll(ops, mockWString);
+      const { operations, wString } = Core.integrateAll(ops, mockWString);
       expect(operations).toEqual([invalidInsertOp]);
       expect(WString.show(wString)).toBe('bar');
     });

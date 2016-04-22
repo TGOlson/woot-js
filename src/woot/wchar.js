@@ -1,5 +1,3 @@
-import R from 'ramda';
-
 import type { Ordering } from './types';
 
 export type WCharId = {
@@ -45,8 +43,8 @@ export const wCharEnding = {
 };
 
 
-export const hide: (_:WChar) => WChar
-= R.assoc('isVisible', false);
+export const hide = (wChar: WChar): WChar =>
+  ({ ...wChar, isVisible: false });
 
 
 export const compareWCharIds = (idA: WCharId, idB: WCharId): Ordering => {

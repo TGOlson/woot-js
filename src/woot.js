@@ -46,7 +46,7 @@ const updateWString = (wString: WString, client: WootClient): WootClient =>
 // not exposed - consumers should use sendLocalDelete or sendLocalInsert
 // TODO: refactor with sendOperations - lots of similar functionality
 const sendLocalOperation = (client: WootClient, operation: Operation) => {
-  const operations = R.append(operation, client.operationQueue);
+  const operations = [...client.operationQueue, operation];
   const result = integrateAllLocal(operations, client.wString);
 
   return incClock(
@@ -81,7 +81,7 @@ export const makeWootClientEmpty = (clientId: ClientId): WootClient =>
 // the operation will either be integrated into the woot client's string
 // or it will be added to the client's interal operation queue to be tried again
 export const sendOperation = (client: WootClient, operation: Operation): WootClient => {
-  const operations = R.append(operation, client.operationQueue);
+  const operations = [...client.operationQueue, operation];
   const result = integrateAll(operations, client.wString);
 
   return updateWString(result.wString,
@@ -90,8 +90,8 @@ export const sendOperation = (client: WootClient, operation: Operation): WootCli
 };
 
 
-// sendOperations :: WootClient -> [Operation] -> WootClient
-export const sendOperations = R.reduce(sendOperation);
+export const sendOperations = (client: WootClient, operations: Array<Operation>): WootClient =>
+  R.reduce(sendOperation, client, operations);
 
 type LocalOperationResult = {
   operation: Optional<Operation>;
