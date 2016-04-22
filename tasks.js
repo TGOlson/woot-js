@@ -2,7 +2,7 @@ import gulp from 'gulp';
 import gutil from 'gulp-util';
 import shell from 'gulp-shell';
 
-import {spawn} from 'child_process';
+import { spawn } from 'child_process';
 
 import browserify from 'browserify';
 import babelify from 'babelify';
@@ -39,7 +39,7 @@ gulp.task('typecheck', (cb) => {
   const ls = spawn(
     './node_modules/.bin/flow',
     ['check', '--all'],
-    {stdio: 'inherit'}
+    { stdio: 'inherit' }
   );
 
   ls.on('close', () => cb());
