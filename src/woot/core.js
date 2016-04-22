@@ -46,7 +46,7 @@ const integrateInsert = (
   const newPrevId = subsection[0].id;
 
   // if the current char id is less than the previous id
-  if (WChar.compareWCharIds(wChar.id, newPrevId) === -1) {
+  if (WChar.compareWCharIds(wChar.id, newPrevId) === 'LT') {
     const index = WString.indexOf(newPrevId, wString);
     return WString.insert(index, wChar, wString);
   }

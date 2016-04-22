@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-import type { Ordering } from '../types/ordering';
+import type { Ordering } from '../types';
 
 export type WCharId = {
   clientId: number;
@@ -56,15 +56,14 @@ export const hide: (_:WChar) => WChar
 = R.assoc('isVisible', false);
 
 
-// compareCharIds :: WCharId -> WCharId -> Ordering (-1, 0, 1)
 export const compareWCharIds = (idA: WCharId, idB: WCharId): Ordering => {
   if (idA.clientId === idB.clientId) {
     if (idA.clock === idB.clock) {
-      return 0;
+      return 'EQ';
     }
 
-    return idA.clock < idB.clock ? -1 : 1;
+    return idA.clock < idB.clock ? 'LT' : 'GT';
   }
 
-  return idA.clientId < idB.clientId ? -1 : 1;
+  return idA.clientId < idB.clientId ? 'LT' : 'GT';
 };

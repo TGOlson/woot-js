@@ -5,7 +5,7 @@
   "env": {
     "browser": false,
     "node": true,
-    "mocha": true
+    "jasmine": true
   },
   "rules": {
     "flow-vars/define-flow-type": 2,
