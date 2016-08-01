@@ -34,11 +34,29 @@ Note: this is a minimal example used to show how operations can be managed acros
 
 ### Documentation
 
-TODO
+Type definitions for the most useful functions:
+
+* `makeWootClientEmpty :: Int -> WootClient`
+
+Makes a new client with an empty string. This will most often be used on the server when initializing a new client.
+
+* `makeWootClient :: WString -> Int -> WootClient`
+
+Create a client from a known string. This will most often be used to sync a newly connected client with existing server state.
+
+* `sendOperation :: WootClient -> Operation -> WootClient`
+
+Apply an operation to a client. Note: if the operation cannot be applied the original client will be returned without modification.
+
+* `sendLocalDelete :: WootClient -> Int -> {operation: ?Operation, client, WootClient}`
+* `sendLocalInsert :: WootClient -> Int -> String -> {operation: ?Operation, client, WootClient}`
+
+Apply a local operation to a client. This should only be used when directly applying a local modification to the client that originated it. If the resulting value includes a non-null operation, the operation should be emitting to all other connected clients. Note: this makes assumptions about the ability to integrate to provided operation into the client.
+
+* `showClientString :: WootClient -> String`
+
+For a string formatted representation of the internal client string.
 
 ### TODO
 
 * Setup CI
-* More Docs
-* Full example with web sockets and multiple clients.
-* Run flow against specs
