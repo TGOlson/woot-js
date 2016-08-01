@@ -26,7 +26,11 @@ npm test
 
 ### Examples
 
-For a detailed example, take a look at the `examples` (TODO: link) directory. This shows a minimal setup using this library along with a web socket library to create a real time collaborative application with multiple clients.
+For a detailed example, take a look at the [example directory](https://github.com/TGOlson/woot-js/tree/master/example). This shows a minimal setup using `woot-js` along with a web socket library to create a real time collaborative application with multiple clients.
+
+Start server using `node example/server.js`. Then navigate to `http://localhost:3000/example` to see the running application.
+
+Note: this is a minimal example used to show how operations can be managed across multiple clients. It does not correctly handle all text editing interactions, such as copy/paste/bulk delete.
 
 ### Documentation
 
