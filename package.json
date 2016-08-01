@@ -2,7 +2,7 @@
   "name": "woot-js",
   "version": "0.0.7",
   "description": "Core library for creating real time collaborative documents without Operational transformation (WOOT). This package provides the core logic and data types for building a server capable and handling real time editing with WOOT.",
-  "main": "dist/woot.js",
+  "main": "dist/woot.min.js",
   "scripts": {
     "test": "./node_modules/.bin/gulp test"
   },
@@ -29,6 +29,7 @@
     "eslint-config-airbnb": "^3.1.0",
     "eslint-plugin-flow-vars": "^0.1.3",
     "eslint-plugin-react": "^3.7.1",
+    "express": "^4.14.0",
     "flow-bin": "^0.28.0",
     "gulp": "^3.9.0",
     "gulp-shell": "^0.5.1",
@@ -36,7 +37,8 @@
     "gulp-uglify": "^1.5.4",
     "gulp-util": "^3.0.7",
     "jasmine": "^2.3.2",
-    "uglifyify": "^3.0.2",
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^1.4.8",
     "v8-profiler": "^5.3.2",
     "vinyl-source-stream": "^1.1.0"
   },

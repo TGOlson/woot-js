@@ -3,8 +3,6 @@
   <head>
     <meta charset="utf-8">
     <title>Junk</title>
-    <script type="text/javascript" src="../dist/woot.js"></script>
-    <script type="text/javascript" src="clients.js"></script>
     <style media="screen">
       .editeable {
         height: 350px;
@@ -17,7 +15,10 @@
   </head>
   <body>
     <h1>WOOT Example!</h1>
-    <div class="editeable" contenteditable="true" id="text-1"></div>
-    <div class="editeable" contenteditable="true" id="text-2"></div>
+    <div class="editeable" contenteditable="true" id="text-area"></div>
+
+    <script type="text/javascript" src="../dist/woot.min.js"></script>
+    <script type="text/javascript" src="../node_modules/socket.io-client/socket.io.js"></script>
+    <script type="text/javascript" src="client.js"></script>
   </body>
 </html>
