@@ -1,7 +1,7 @@
 # woot-js
 
 Core library for creating real time collaborative documents without Operational
-transformation (WOOT). This package provides the core logic and data types for building a server capable and handling real time editing with WOOT.
+transformation (WOOT). This package provides the core logic and data types for building a client and server capable and handling real time editing with WOOT. This package is environment agnostic - meaning it is suitable for use in both client and server environment.
 
 Note: if building a real time collaborative application, you will also need an event layer (such as web-sockets), and likely a library to help handle input events (such as a JS editor).
 

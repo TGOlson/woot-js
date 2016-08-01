@@ -3,9 +3,7 @@
 .*/dist
 .*/spec/.*spec.*
 .*/src/.*spec.*
-.*/profile
 .*/example
-.*index*
 .*gulpfile*
 .*tasks*
 
