@@ -1,9 +1,9 @@
 # woot-js
 
-Core library for creating real time collaborative documents without Operational
-transformation (WOOT). This package provides the core logic and data types for building a client and server capable and handling real time editing with WOOT. This package is environment agnostic - meaning it is suitable for use in both client and server environment.
+Core library for creating real time collaborative documents without operational
+transformation (WOOT). This package provides the core logic and data types for building a client and server capable and handling real time editing with WOOT. This package is environment agnostic - meaning it is suitable for use in both client and server environments.
 
-Note: if building a real time collaborative application, you will also need an event layer (such as web-sockets), and likely a library to help handle input events (such as a JS editor).
+Note: if building a real time collaborative application, you will also need a notification layer (such as web-sockets), and likely a library to help handle input events (such as a JS text editor).
 
 References:
 
@@ -28,9 +28,9 @@ npm test
 
 For a detailed example, take a look at the [example directory](https://github.com/TGOlson/woot-js/tree/master/example). This shows a minimal setup using `woot-js` along with a web socket library to create a real time collaborative application with multiple clients.
 
-Start server using `node example/server.js`. Then navigate to `http://localhost:3000/example` to see the running application.
+Start the server using `node example/server.js`. Then navigate to `http://localhost:3000/example` to see the running application. Open multiple browser windows to see realtime updates across multiple clients.
 
-Note: this is a minimal example used to show how operations can be managed across multiple clients. It does not correctly handle all text editing interactions, such as copy/paste/bulk delete.
+Note: this is a minimal example used to show how operations can be managed across multiple clients. It does not correctly handle all text editing interactions, such as copy/paste/bulk delete - a more robust application would likely use a JS text editor to better handle these event. It also handles only one text document - a production application would likely want to handle name-spacing clients and documents. 
 
 ### Documentation
 
