@@ -3,22 +3,13 @@
   <head>
     <meta charset="utf-8">
     <title>Junk</title>
-    <style media="screen">
-      .editeable {
-        height: 350px;
-        width: 350px;
-        display: inline-block;
-        border: 1px solid #bbb;
-        white-space: pre-wrap;
-      }
-    </style>
   </head>
   <body>
-    <h1>WOOT Example!</h1>
-    <div class="editeable" contenteditable="true" id="text-area"></div>
+    <div id="editor" style="width: 300px; height: 300px; border: 1px solid grey;"></div>
 
     <script type="text/javascript" src="../dist/woot.min.js"></script>
     <script type="text/javascript" src="../node_modules/socket.io-client/socket.io.js"></script>
+    <script src="http://cdn.quilljs.com/latest/quill.js"></script>
     <script type="text/javascript" src="client.js"></script>
   </body>
 </html>
