@@ -1,7 +1,7 @@
 # woot-js
 
 Core library for creating real time collaborative documents without operational
-transformation (WOOT). This package provides the core logic and data types for building a client and server capable and handling real time editing with WOOT. This package is environment agnostic - meaning it is suitable for use in both client and server environments.
+transformation (WOOT). This package provides the core logic and data types for building a client and server capable of handling real time editing with WOOT. This package is environment agnostic - meaning it is suitable for use in both client and server environments.
 
 Note: if building a real time collaborative application, you will also need a notification layer (such as web-sockets), and likely a library to help handle input events (such as a JS text editor).
 
@@ -30,19 +30,17 @@ For a detailed example, take a look at the [example directory](https://github.co
 
 Start the server using `node example/server.js`. Then navigate to `http://localhost:3000/example` to see the running application. Open multiple browser windows to see realtime updates across multiple clients.
 
-Note: this is a minimal example used to show how operations can be managed across multiple clients. It does not correctly handle all text editing interactions, such as copy/paste/bulk delete - a more robust application would likely use a JS text editor to better handle these event. It also handles only one text document - a production application would likely want to handle name-spacing clients and documents. 
+Note: this is a minimal example used to show how operations can be managed across multiple clients. It does not correctly handle all text editing interactions, such as copy/paste/bulk delete - a more robust application would likely use a JS text editor to better handle these events.
 
 ### Documentation
 
-Type definitions for the most useful functions:
-
 * `makeWootClientEmpty :: Int -> WootClient`
 
-Makes a new client with an empty string. This will most often be used on the server when initializing a new client.
+Takes a client id and returns a new client with an empty string. This will most often be used on the server when initializing a new client.
 
 * `makeWootClient :: WString -> Int -> WootClient`
 
-Create a client from a known string. This will most often be used to sync a newly connected client with existing server state.
+Creates a client from a known string. This will most often be used to sync a newly connected client with existing server state.
 
 * `sendOperation :: WootClient -> Operation -> WootClient`
 
@@ -55,7 +53,7 @@ Apply a local operation to a client. This should only be used when directly appl
 
 * `showClientString :: WootClient -> String`
 
-For a string formatted representation of the internal client string.
+Format a string representation of the internal client string.
 
 ### TODO
 
