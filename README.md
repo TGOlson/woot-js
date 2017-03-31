@@ -15,7 +15,7 @@ References:
 Install
 
 ```
-$ npm install --save woot
+$ npm install --save woot-js
 ```
 
 Test
