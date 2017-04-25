@@ -15,7 +15,7 @@ References:
 Install
 
 ```
-$ npm install --save woot
+$ npm install --save woot-js
 ```
 
 Test
@@ -46,8 +46,8 @@ Creates a client from a known string. This will most often be used to sync a new
 
 Apply an operation to a client. Note: if the operation cannot be applied the original client will be returned without modification.
 
-* `sendLocalDelete :: WootClient -> Int -> {operation: ?Operation, client, WootClient}`
-* `sendLocalInsert :: WootClient -> Int -> String -> {operation: ?Operation, client, WootClient}`
+* `sendLocalDelete :: WootClient -> Int -> {operation: ?Operation, client: WootClient}`
+* `sendLocalInsert :: WootClient -> Int -> String -> {operation: ?Operation, client: WootClient}`
 
 Apply a local operation to a client. This should only be used when directly applying a local modification to the client that originated it. If the resulting value includes a non-null operation, the operation should be emitting to all other connected clients. Note: this makes assumptions about the ability to integrate to provided operation into the client.
 
